@@ -7,8 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Carter" Version="8.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SearchBugs.Application\SearchBugs.Application.csproj" />
+    <ProjectReference Include="..\SearchBugs.Domain\SearchBugs.Domain.csproj" />
+    <ProjectReference Include="..\SearchBugs.Infrastructure\SearchBugs.Infrastructure.csproj" />
+    <ProjectReference Include="..\SearchBugs.Persistence\SearchBugs.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
