@@ -8,15 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Endpoints\**" />
-    <Content Remove="Endpoints\**" />
-    <EmbeddedResource Remove="Endpoints\**" />
-    <None Remove="Endpoints\**" />
-  </ItemGroup>
-
-  <ItemGroup>
 	  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.7" />
-	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7" />
   </ItemGroup>
 
@@ -26,10 +19,6 @@
     <ProjectReference Include="..\SearchBugs.Infrastructure\SearchBugs.Infrastructure.csproj" />
     <ProjectReference Include="..\SearchBugs.Persistence\SearchBugs.Persistence.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

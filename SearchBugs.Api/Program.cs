@@ -1,4 +1,5 @@
-//using Carter;
+
+using SearchBugs.Api.Endpoints;
 using SearchBugs.Api.Middleware;
 using SearchBugs.Application;
 using SearchBugs.Infrastructure;
@@ -12,7 +13,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
-//builder.Services.AddCarter();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -24,14 +24,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     //app.ApplyMigrations();
 }
+app.MapAuthenticationsEndpoints();
+app.MapBugsEndpoints();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthorization();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-
-//app.MapCarter();
-
 app.Run();
 
 public partial class Program { }
