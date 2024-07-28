@@ -2,16 +2,16 @@
 
 namespace SearchBugs.Domain.Bugs;
 
-public class Attachment : Entity<AttachmentId>
+public class Attachment : Entity<AttachmentId>, IAuditable
 {
     public string FileName { get; set; }
     public string ContentType { get; set; }
     public byte[] Content { get; set; }
     public BugId BugId { get; set; }
     public Bug Bug { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime CreatedOnUtc { get; set; }
 
+    public DateTime? ModifiedOnUtc { get; set; }
 
     private Attachment(AttachmentId id, string fileName, string contentType, byte[] content, BugId bugId) : base(id)
     {

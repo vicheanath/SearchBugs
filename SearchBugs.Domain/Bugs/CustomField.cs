@@ -4,7 +4,6 @@ using Shared.Primitives;
 namespace SearchBugs.Domain.Bugs;
 public class CustomField : Entity<CustomFieldId>
 {
-    public CustomFieldId Id { get; set; }
     public string Name { get; set; }
     public string FieldType { get; set; }
     public ProjectId ProjectId { get; set; }

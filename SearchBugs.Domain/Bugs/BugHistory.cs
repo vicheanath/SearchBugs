@@ -9,9 +9,7 @@ public class BugHistory : Entity<HistoryId>
     public string FieldChanged { get; set; }
     public string OldValue { get; set; }
     public string NewValue { get; set; }
-    public DateTime ChangedAt { get; set; }
-
-    public Bug Bug { get; set; }
+    public DateTime ChangedAtUtc { get; set; }
 
     private BugHistory()
     {
@@ -25,7 +23,7 @@ public class BugHistory : Entity<HistoryId>
         FieldChanged = fieldChanged;
         OldValue = oldValue;
         NewValue = newValue;
-        ChangedAt = changedAt;
+        ChangedAtUtc = changedAt;
     }
 
     public static BugHistory Create(BugId bugId, UserId changedBy, string fieldChanged, string oldValue, string newValue, DateTime changedAt)

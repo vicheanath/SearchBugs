@@ -2,12 +2,10 @@
 
 namespace SearchBugs.Domain.Bugs;
 
-public class BugCustomField : ValueObject
+public class BugCustomField : Entity<BugCustomFieldId>
 {
-    public Guid Id { get; set; }
-    public Guid BugCustomFieldId { get; set; }
     public BugId BugId { get; set; }
-    public Guid CustomFieldId { get; set; }
+    public CustomFieldId CustomFieldId { get; set; }
     public string Value { get; set; }
 
     private BugCustomField()
@@ -15,27 +13,16 @@ public class BugCustomField : ValueObject
 
     }
 
-    private BugCustomField(Guid id, Guid bugCustomFieldId, BugId bugId, Guid customFieldId, string value)
+    private BugCustomField(BugCustomFieldId id, BugId bugId, CustomFieldId customFieldId, string value) : base(id)
     {
-        Id = id;
-        BugCustomFieldId = bugCustomFieldId;
         BugId = bugId;
         CustomFieldId = customFieldId;
         Value = value;
     }
 
-    public static BugCustomField Create(Guid bugCustomFieldId, BugId bugId, Guid customFieldId, string value)
+    public static BugCustomField Create(BugId bugId, CustomFieldId customFieldId, string value)
     {
-        var id = Guid.NewGuid();
-        return new BugCustomField(id, bugCustomFieldId, bugId, customFieldId, value);
-    }
-
-    protected override IEnumerable<object> GetAtomicValues()
-    {
-        yield return Id;
-        yield return BugCustomFieldId;
-        yield return BugId;
-        yield return CustomFieldId;
-        yield return Value;
+        var id = new BugCustomFieldId(Guid.NewGuid());
+        return new BugCustomField(id, bugId, customFieldId, value);
     }
 }

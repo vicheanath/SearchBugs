@@ -15,6 +15,10 @@ public class Project : Entity<ProjectId>, IAuditable
 
     public DateTime? ModifiedOnUtc { get; private set; }
 
+    public IReadOnlyCollection<CustomField> CustomsFields => _customFields.AsReadOnly();
+
+    private List<CustomField> _customFields = new();
+
     private Project(ProjectId id, string name, string description)
         : base(id)
     {

@@ -9,6 +9,8 @@ public class Bug : Entity<BugId>, IAuditable
 {
     public string Title { get; }
     public string Description { get; }
+    public int StatusId { get; }
+    public int PriorityId { get; }
     public BugStatus Status { get; private set; }
     public BugPriority Priority { get; private set; }
     public string Severity { get; private set; }
@@ -16,8 +18,6 @@ public class Bug : Entity<BugId>, IAuditable
     public UserId AssigneeId { get; }
 
     public UserId ReporterId { get; }
-
-    //public Project Project { get; private set; }
 
     public DateTime CreatedOnUtc { get; private set; }
 
