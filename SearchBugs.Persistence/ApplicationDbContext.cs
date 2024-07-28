@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using SearchBugs.Application.Abstractions.Data;
+using SearchBugs.Domain;
+using SearchBugs.Domain.Projects;
+using SearchBugs.Domain.Users;
 using Shared.Primitives;
 namespace SearchBugs.Persistence;
 
@@ -8,7 +10,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWor
 {
     private readonly IPublisher _publisher;
 
-    public ApplicationDbContext(DbContextOptions options, IPublisher publisher)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IPublisher publisher)
         : base(options)
     {
         _publisher = publisher;
@@ -19,15 +21,11 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWor
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 
-    //public DbSet<Customer> Customers { get; set; }
+    public DbSet<Project> Projects { get; private set; }
+    public DbSet<User> Users { get; private set; }
+    public DbSet<Permission> Permissions { get; private set; }
 
-    //public DbSet<Order> Orders { get; set; }
 
-    //public DbSet<OrderSummary> OrderSummaries { get; set; }
-
-    //public DbSet<Product> Products { get; set; }
-
-    //public DbSet<LineItem> LineItems { get; set; }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {

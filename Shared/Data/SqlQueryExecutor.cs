@@ -5,7 +5,7 @@ namespace Shared.Data;
 /// <summary>
 /// Represents the SQL query executor.
 /// </summary>
-internal sealed class SqlQueryExecutor : ISqlQueryExecutor
+public sealed class SqlQueryExecutor : ISqlQueryExecutor
 {
     private readonly ISqlConnectionFactory _sqlConnectionFactory;
 

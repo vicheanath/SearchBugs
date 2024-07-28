@@ -1,7 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SearchBugs.Application.Abstractions.Data;
+using Microsoft.Extensions.Options;
+using SearchBugs.Domain;
+using SearchBugs.Domain.Bugs;
+using SearchBugs.Domain.Users;
+using SearchBugs.Persistence.Repositories;
+using Shared.Data;
+using Shared.Options;
 
 
 namespace SearchBugs.Persistence;
@@ -12,17 +18,27 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddDbContext<ApplicationDbContext>(options =>
+        services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
+        {
+            ConnectionStringOptions connectionStringOptions = serviceProvider.GetService<IOptions<ConnectionStringOptions>>()!.Value;
             options
-                .UseNpgsql(configuration.GetConnectionString("Database"))
-                .UseSnakeCaseNamingConvention());
+                .UseNpgsql(connectionStringOptions,
+                    sqlOptions =>
+                    {
+                        sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                        sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    })
+                .UseSnakeCaseNamingConvention();
+        });
+        services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
+        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
+        services.AddScoped<IBugRepository, BugRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
-        services.AddScoped<IApplicationDbContext>(sp =>
-            (IApplicationDbContext)sp.GetRequiredService<ApplicationDbContext>());
-
-        services.AddScoped<IUnitOfWork>(sp =>
-            (IUnitOfWork)sp.GetRequiredService<ApplicationDbContext>());
-
+        services.AddMemoryCache()
+            .ConfigureOptions<ConnectionStringSetup>();
+        services.AddTransient<ISqlConnectionFactory, SqlConnectionFactory>();
+        services.AddTransient<ISqlQueryExecutor, SqlQueryExecutor>();
         return services;
     }
 }

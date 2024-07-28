@@ -1,8 +1,8 @@
 ﻿
 using SearchBugs.Domain;
-using SearchBugs.Domain.BugTracking;
-using SearchBugs.Domain.Project;
-using SearchBugs.Domain.User;
+using SearchBugs.Domain.Bugs;
+using SearchBugs.Domain.Projects;
+using SearchBugs.Domain.Users;
 using Shared.Messaging;
 using Shared.Results;
 
@@ -21,18 +21,24 @@ public class CreateBugCommandHandler : ICommandHandler<CreateBugCommand>
 
     public async Task<Result> Handle(CreateBugCommand request, CancellationToken cancellationToken)
     {
-
+        var bugStatus = BugStatus.FromName(request.Status);
+        var bugPriority = BugPriority.FromName(request.Priority);
         var bug = Bug.Create(
             request.Title,
             request.Description,
-            request.Status,
-            request.Priority,
+            bugStatus,
+            bugPriority,
             request.Severity,
             new ProjectId(request.ProjectId),
             new UserId(request.AssigneeId),
             new UserId(request.ReporterId));
 
-        _bugRepository.Add(bug);
+        if (bug.IsFailure)
+        {
+            return Result.Failure(bug.Error);
+        }
+
+        _bugRepository.Add(bug.Value);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success();
     }

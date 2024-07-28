@@ -1,7 +1,7 @@
 ﻿namespace SearchBugs.Domain;
 
 /// <summary>
-/// Represents the training module unit of work.
+/// Represents unit of work.
 /// </summary>
 public interface IUnitOfWork
 {
@@ -10,5 +10,5 @@ public interface IUnitOfWork
     /// </summary>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The completed task.</returns>
-    Task SaveChangesAsync(CancellationToken cancellationToken = default);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

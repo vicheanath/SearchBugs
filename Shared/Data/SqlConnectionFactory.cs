@@ -8,7 +8,7 @@ namespace Shared.Data;
 /// <summary>
 /// Represents the SQL connection factory.
 /// </summary>
-internal sealed class SqlConnectionFactory : ISqlConnectionFactory, IDisposable
+public sealed class SqlConnectionFactory : ISqlConnectionFactory, IDisposable
 {
     private readonly ConnectionStringOptions _connectionString;
     private IDbConnection? _connection;

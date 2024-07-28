@@ -1,4 +1,4 @@
-using Carter;
+//using Carter;
 using SearchBugs.Api.Middleware;
 using SearchBugs.Application;
 using SearchBugs.Infrastructure;
@@ -9,10 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddInfrastructure();
 builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
-builder.Services.AddCarter();
+//builder.Services.AddCarter();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -26,10 +26,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-app.MapCarter();
+//app.MapCarter();
 
 app.Run();
 

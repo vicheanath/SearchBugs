@@ -5,7 +5,7 @@ namespace Shared.Data;
 /// <summary>
 /// Represents the SQL connection factory interface.
 /// </summary>
-internal interface ISqlConnectionFactory
+public interface ISqlConnectionFactory
 {
     /// <summary>
     /// Gets the open database connection instance.

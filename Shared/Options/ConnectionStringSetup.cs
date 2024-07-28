@@ -6,7 +6,7 @@ namespace Shared.Options;
 /// <summary>
 /// Represents the <see cref="ConnectionStringOptions"/> setup.
 /// </summary>
-internal sealed class ConnectionStringSetup : IConfigureOptions<ConnectionStringOptions>
+public sealed class ConnectionStringSetup : IConfigureOptions<ConnectionStringOptions>
 {
     private const string ConnectionStringName = "Database";
     private readonly IConfiguration _configuration;

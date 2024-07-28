@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SearchBugs.Application.Exceptions;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SearchBugs.Api.Middleware;
 

@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SearchBugs.Persistence;
 using Shared.Primitives;
 
 namespace SearchBugs.Persistence.Repositories;
 
 internal abstract class Repository<TEntity, TEntityId>
     where TEntity : Entity<TEntityId>
-    where TEntityId : class
+    where TEntityId : class, IEntityId
 {
     protected readonly ApplicationDbContext DbContext;
 

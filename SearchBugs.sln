@@ -17,12 +17,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		..\..\..\Downloads\DDD_Bug_Tracking_ERD.png = ..\..\..\Downloads\DDD_Bug_Tracking_ERD.png
-		README.md = README.md
+		Api.md = Api.md
+		Role.md = Role.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchBugs.Persistence", "SearchBugs.Persistence\SearchBugs.Persistence.csproj", "{7E917907-F9D9-48D1-8968-8AA8E88F13FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SearchBugs.Persistence", "SearchBugs.Persistence\SearchBugs.Persistence.csproj", "{7E917907-F9D9-48D1-8968-8AA8E88F13FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{91E839BC-EFCA-4057-9DE2-931533A4620C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{91E839BC-EFCA-4057-9DE2-931533A4620C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

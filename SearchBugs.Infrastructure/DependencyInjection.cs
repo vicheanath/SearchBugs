@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
 using Quartz;
+using SearchBugs.Domain.Users;
+using SearchBugs.Infrastructure.Authentication;
 
 namespace SearchBugs.Infrastructure;
 
@@ -18,5 +21,11 @@ public static class DependencyInjection
         });
 
         services.ConfigureOptions<LoggingBackgroundJobSetup>();
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer();
+        services.AddTransient<IJwtProvider, JwtProvider>();
+        services.ConfigureOptions<JwtOptionsSetup>();
+        services.ConfigureOptions<JwtBearerOptionsSetup>();
     }
 }
