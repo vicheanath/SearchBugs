@@ -35,6 +35,17 @@ internal sealed class BugConfiguration : IEntityTypeConfiguration<Bug>
             .IsRequired();
         builder.Property(b => b.ModifiedOnUtc)
             .IsRequired(false);
+        builder.Property(b => b.ProjectId)
+            .HasConversion(id => id.Value, value => new ProjectId(value))
+            .IsRequired();
+        builder.Property(b => b.StatusId);
+
+        builder.Property(b => b.PriorityId);
+        builder.Property(b => b.AssigneeId)
+            .HasConversion(id => id.Value, value => new UserId(value));
+        builder.Property(b => b.ReporterId)
+            .HasConversion(id => id.Value, value => new UserId(value));
+
 
     }
 
@@ -55,26 +66,6 @@ internal sealed class BugConfiguration : IEntityTypeConfiguration<Bug>
         builder.HasOne<User>()
             .WithMany()
             .HasForeignKey(b => b.ReporterId);
-
-        builder.HasMany(b => b.Comments)
-            .WithOne()
-            .HasForeignKey(c => c.BugId);
-
-        builder.HasMany(b => b.Attachments)
-            .WithOne()
-            .HasForeignKey(a => a.BugId);
-
-        builder.HasMany(b => b.BugHistories)
-            .WithOne()
-            .HasForeignKey(h => h.BugId);
-
-        builder.HasMany(b => b.BugCustomFields)
-            .WithOne()
-            .HasForeignKey(c => c.BugId);
-
-        builder.HasMany(b => b.TimeTracking)
-            .WithOne()
-            .HasForeignKey(t => t.BugId);
     }
 
     private static void ConfigureIndexes(EntityTypeBuilder<Bug> builder)

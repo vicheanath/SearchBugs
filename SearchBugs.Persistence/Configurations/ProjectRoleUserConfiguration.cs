@@ -12,16 +12,10 @@ internal sealed class ProjectRoleUserConfiguration : IEntityTypeConfiguration<Pr
     {
         builder.ToTable(TableNames.ProjectRoleUsers);
         builder.HasKey(pru => new { pru.ProjectId, pru.UserId, pru.RoleId });
-        builder.HasOne<Project>()
-            .WithMany()
-            .HasForeignKey(pru => pru.ProjectId);
-
-        builder.HasOne<User>()
-            .WithMany()
-            .HasForeignKey(pru => pru.UserId);
-
-        builder.HasOne<Role>()
-            .WithMany()
-            .HasForeignKey(pru => pru.RoleId);
+        builder.Property(pru => pru.UserId)
+            .HasConversion(id => id.Value, value => new UserId(value));
+        builder.Property(pru => pru.ProjectId)
+            .HasConversion(id => id.Value, value => new ProjectId(value));
+        builder.Property(pru => pru.RoleId);
     }
 }

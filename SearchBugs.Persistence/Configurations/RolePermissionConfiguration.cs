@@ -1,8 +1,9 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SearchBugs.Domain.Users;
+using SearchBugs.Domain.Roles;
 using SearchBugs.Persistence.Constants;
+using Shared.Extensions;
 
 
 namespace SearchBugs.Persistence.Configurations;
@@ -10,34 +11,58 @@ namespace SearchBugs.Persistence.Configurations;
 internal sealed class RolePermissionConfiguration
     : IEntityTypeConfiguration<RolePermission>
 {
-    public void Configure(EntityTypeBuilder<RolePermission> builder)
+
+    public void Configure(EntityTypeBuilder<RolePermission> builder) =>
+        builder
+            .Tap(ConfigureDataStructure)
+            .Tap(ConfigureRelationships)
+            .Tap(ConfigureIndexes)
+            .Tap(ConfigureData);
+
+    private static void ConfigureDataStructure(EntityTypeBuilder<RolePermission> builder)
     {
         builder.ToTable(TableNames.RolePermissions);
-        builder.HasKey(x => new { x.RoleId, x.PermissionId });
 
-        builder.HasData(
-            GuestPermissionsSeed().ToArray(),
-            ReporterPermissionsSeed().ToArray(),
-            DeveloperPermissionsSeed().ToArray(),
-            ProjectManagerPermissionsSeed().ToArray(),
-            AdminPermissionsSeed().ToArray()
-        );
+        builder.HasKey(rolePermission => new { rolePermission.RoleId, rolePermission.PermissionId });
     }
 
+    private static void ConfigureRelationships(EntityTypeBuilder<RolePermission> builder)
+    {
+        builder.HasOne<Role>()
+            .WithMany()
+            .HasForeignKey(rolePermission => rolePermission.RoleId)
+            .IsRequired();
+
+        builder.HasOne<Permission>()
+            .WithMany()
+            .HasForeignKey(rolePermission => rolePermission.PermissionId)
+            .IsRequired();
+    }
+
+    private static void ConfigureIndexes(EntityTypeBuilder<RolePermission> builder) =>
+        builder.HasIndex(rolePermission => rolePermission.RoleId);
+
+    private static void ConfigureData(EntityTypeBuilder<RolePermission> builder)
+    {
+        // merge all seed data
+        var seedData = new List<RolePermission>();
+        seedData.AddRange(GuestPermissionsSeed());
+        seedData.AddRange(ReporterPermissionsSeed());
+        seedData.AddRange(DeveloperPermissionsSeed());
+        seedData.AddRange(ProjectManagerPermissionsSeed());
+        seedData.AddRange(AdminPermissionsSeed());
+
+        builder.HasData(seedData);
+    }
     private static RolePermission Create(
         Role role, Permission permission)
     {
-        return new RolePermission
-        {
-            RoleId = role.Id,
-            PermissionId = permission.Id
-        };
+        return new RolePermission(role, permission);
     }
     private static List<RolePermission> GuestPermissionsSeed()
     {
         var permissions = new List<RolePermission>
         {
-            // Bug View Bug Details, List All Bugs, View Bug Comments, View Bug Attachments, View Bug History, View Bug Time Tracking, View Bug Custom Fields
             Create(Role.Guest, Permission.ViewBugDetails),
             Create(Role.Guest, Permission.ListAllBugs),
             Create(Role.Guest, Permission.ViewBugComments),
@@ -52,7 +77,6 @@ internal sealed class RolePermissionConfiguration
     {
         var permissions = new List<RolePermission>
         {
-            // Bug View Bug Details, List All Bugs, Add Comment to Bug, View Bug Comments, Add Attachment to Bug, View Bug Attachments, View Bug History, View Bug Time Tracking, View Bug Custom Fields
             Create(Role.Reporter, Permission.CreateBug),
             Create(Role.Reporter, Permission.ViewBugDetails),
             Create(Role.Reporter, Permission.ListAllBugs),
@@ -63,7 +87,6 @@ internal sealed class RolePermissionConfiguration
             Create(Role.Reporter, Permission.ViewBugHistory),
             Create(Role.Reporter, Permission.ViewTimeSpentOnBug),
             Create(Role.Reporter, Permission.ViewCustomFieldOnBug),
-            // Notification View User Notifications, Mark Notification as Read
             Create(Role.Reporter, Permission.ViewNotification),
             Create(Role.Reporter, Permission.MarkNotificationAsRead)
         };
@@ -75,7 +98,6 @@ internal sealed class RolePermissionConfiguration
     {
         var permissions = new List<RolePermission>
         {
-            // Bug Create Bug, View Bug Details, Update Bug, List All Bugs, Add Comment to Bug, View Bug Comments, Add Attachment to Bug, View Bug Attachments, View Bug History, Track Time for Bug, View Bug Time Tracking, Add Custom Field to Bug, View Bug Custom Fields
             Create(Role.Developer, Permission.CreateBug),
             Create(Role.Developer, Permission.ViewBugDetails),
             Create(Role.Developer, Permission.UpdateBug),
@@ -89,11 +111,8 @@ internal sealed class RolePermissionConfiguration
             Create(Role.Developer, Permission.ViewTimeSpentOnBug),
             Create(Role.Developer, Permission.AddCustomFieldToBug),
             Create(Role.Developer, Permission.ViewCustomFieldOnBug),
-            // Notification View User Notifications, Mark Notification as Read, Delete Notification
             Create(Role.Developer, Permission.ViewNotification),
             Create(Role.Developer, Permission.MarkNotificationAsRead),
-
-            // Repository 
             Create(Role.Developer, Permission.ViewRepositoryDetails),
             Create(Role.Developer, Permission.LinkBugToRepository),
             Create(Role.Developer, Permission.ViewBugRepository)
@@ -105,14 +124,12 @@ internal sealed class RolePermissionConfiguration
     {
         var permissions = new List<RolePermission>
         {
-            // Project
             Create(Role.ProjectManager, Permission.ListAllUsers),
             Create(Role.ProjectManager, Permission.CreateProject),
             Create(Role.ProjectManager, Permission.ViewProjectDetails),
             Create(Role.ProjectManager, Permission.UpdateProject),
             Create(Role.ProjectManager, Permission.DeleteProject),
             Create(Role.ProjectManager, Permission.ListAllProjects),
-            // Bug  Create Bug, View Bug Details, Update Bug, Delete Bug, List All Bugs, Add Comment to Bug, View Bug Comments, Add Attachment to Bug, View Bug Attachments, View Bug History, Track Time for Bug, View Bug Time Tracking, Add Custom Field to Bug, View Bug Custom Fields
             Create(Role.ProjectManager, Permission.CreateBug),
             Create(Role.ProjectManager, Permission.ViewBugDetails),
             Create(Role.ProjectManager, Permission.UpdateBug),
@@ -127,11 +144,9 @@ internal sealed class RolePermissionConfiguration
             Create(Role.ProjectManager, Permission.ViewTimeSpentOnBug),
             Create(Role.ProjectManager, Permission.AddCustomFieldToBug),
             Create(Role.ProjectManager, Permission.ViewCustomFieldOnBug),
-            // Notification View User Notifications, Mark Notification as Read, Delete Notification
             Create(Role.ProjectManager, Permission.ViewNotification),
             Create(Role.ProjectManager, Permission.MarkNotificationAsRead),
             Create(Role.ProjectManager, Permission.DeleteNotification),
-            // Repository Create Repository, View Repository Details, Update Repository, Delete Repository, List All Repositories, Link Bug to Repository, View Bug Repository
             Create(Role.ProjectManager, Permission.CreateRepository),
             Create(Role.ProjectManager, Permission.ViewRepositoryDetails),
             Create(Role.ProjectManager, Permission.UpdateRepository),

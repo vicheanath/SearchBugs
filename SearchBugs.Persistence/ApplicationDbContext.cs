@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SearchBugs.Domain;
+using SearchBugs.Domain.Bugs;
 using SearchBugs.Domain.Projects;
+using SearchBugs.Domain.Roles;
 using SearchBugs.Domain.Users;
 using Shared.Primitives;
 namespace SearchBugs.Persistence;
@@ -18,13 +20,25 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWor
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //modelBuilder.HasDefaultSchema(Schemas.BugsSearch);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 
     public DbSet<Project> Projects { get; private set; }
     public DbSet<User> Users { get; private set; }
     public DbSet<Permission> Permissions { get; private set; }
+    public DbSet<Role> Roles { get; private set; }
+    public DbSet<Bug> Bugs { get; private set; }
+    public DbSet<BugStatus> BugStatuses { get; private set; }
+    public DbSet<BugPriority> BugPriorities { get; private set; }
+    public DbSet<Comment> Comments { get; private set; }
+    public DbSet<Attachment> Attachments { get; private set; }
+    public DbSet<BugCustomField> BugCustomFields { get; private set; }
 
+    public DbSet<CustomField> CustomFields { get; private set; }
+
+
+    //public DbSet<Notification> Notifications { get; private set; }
 
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

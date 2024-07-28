@@ -8,6 +8,9 @@ public class CustomField : Entity<CustomFieldId>
     public string FieldType { get; set; }
     public ProjectId ProjectId { get; set; }
 
+    public IReadOnlyCollection<BugCustomField> BugCustomFields => _bugCustomFields.AsReadOnly();
+
+    private List<BugCustomField> _bugCustomFields = new();
 
     private CustomField()
     {

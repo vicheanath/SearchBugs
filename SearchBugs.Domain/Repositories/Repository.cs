@@ -1,9 +1,9 @@
 ﻿using SearchBugs.Domain.Projects;
 using Shared.Primitives;
 
-namespace SearchBugs.Domain.Repositorys;
+namespace SearchBugs.Domain.Repositories;
 
-public class Repository : Entity<RepoId>
+public class Repository : Entity<RepositoryId>
 {
     public string Name { get; private set; }
     public string Description { get; private set; }
@@ -14,7 +14,7 @@ public class Repository : Entity<RepoId>
 
     public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
 
-    private Repository(RepoId id, string name, string description, string url, ProjectId projectId)
+    private Repository(RepositoryId id, string name, string description, string url, ProjectId projectId)
         : base(id)
     {
         Name = name;
@@ -30,7 +30,7 @@ public class Repository : Entity<RepoId>
 
     public static Repository Create(string name, string description, string url, ProjectId projectId)
     {
-        var id = new RepoId(Guid.NewGuid());
+        var id = new RepositoryId(Guid.NewGuid());
         return new Repository(id, name, description, url, projectId);
     }
 

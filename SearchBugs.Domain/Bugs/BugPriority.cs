@@ -11,4 +11,8 @@ public class BugPriority : Enumeration<BugPriority>
     private BugPriority(int id, string name) : base(id, name)
     {
     }
+
+    private BugPriority()
+    {
+    }
 }

@@ -1,24 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SearchBugs.Domain.Users;
+using SearchBugs.Domain.Roles;
 using SearchBugs.Persistence.Constants;
+using Shared.Extensions;
 
 namespace SearchBugs.Persistence.Configurations;
 
 internal class RoleConfiguration : IEntityTypeConfiguration<Role>
 {
-    public void Configure(EntityTypeBuilder<Role> builder)
+    public void Configure(EntityTypeBuilder<Role> builder) =>
+        builder
+            .Tap(ConfigureDataStructure);
+
+    private static void ConfigureDataStructure(EntityTypeBuilder<Role> builder)
     {
         builder.ToTable(TableNames.Roles);
 
-        builder.HasKey(x => x.Id);
+        builder.HasKey(role => role.Id);
 
-        builder.HasMany(x => x.Permissions)
-            .WithMany()
-            .UsingEntity<RolePermission>();
+        builder.Property(role => role.Id).ValueGeneratedNever();
 
-        builder.HasMany(x => x.Users)
-            .WithMany(x => x.Roles);
+        builder.Property(role => role.Name).HasMaxLength(100);
 
         builder.HasData(Role.GetValues());
     }

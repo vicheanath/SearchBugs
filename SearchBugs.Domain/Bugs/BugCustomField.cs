@@ -8,6 +8,7 @@ public class BugCustomField : Entity<BugCustomFieldId>
     public CustomFieldId CustomFieldId { get; set; }
     public string Value { get; set; }
 
+
     private BugCustomField()
     {
 

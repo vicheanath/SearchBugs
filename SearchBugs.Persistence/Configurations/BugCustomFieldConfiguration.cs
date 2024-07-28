@@ -32,12 +32,12 @@ internal sealed class BugCustomFieldConfiguration : IEntityTypeConfiguration<Bug
     private static void ConfigureRelationships(EntityTypeBuilder<BugCustomField> builder)
     {
         builder.HasOne<Bug>()
-            .WithMany(b => b.BugCustomFields)
-            .HasForeignKey(cf => cf.BugId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .WithMany()
+            .HasForeignKey(cf => cf.BugId);
         builder.HasOne<CustomField>()
             .WithMany()
             .HasForeignKey(cf => cf.CustomFieldId);
+
     }
 
     private static void ConfigureIndexes(EntityTypeBuilder<BugCustomField> builder)

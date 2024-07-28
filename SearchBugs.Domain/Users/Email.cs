@@ -11,6 +11,10 @@ public class Email : ValueObject
         Value = value;
     }
 
+    private Email()
+    {
+    }
+
     public static Email Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))

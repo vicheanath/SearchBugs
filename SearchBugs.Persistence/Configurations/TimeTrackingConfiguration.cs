@@ -29,7 +29,7 @@ internal sealed class TimeTrackingConfiguration : IEntityTypeConfiguration<TimeT
             .HasConversion(id => id.Value, value => new UserId(value))
             .IsRequired();
         builder.Property(tt => tt.TimeSpent)
-            .IsRequired();
+            .IsRequired(false);
         builder.Property(tt => tt.LoggedAt)
             .IsRequired();
     }
@@ -40,6 +40,9 @@ internal sealed class TimeTrackingConfiguration : IEntityTypeConfiguration<TimeT
             .WithMany(b => b.TimeTracking)
             .HasForeignKey(tt => tt.BugId)
             .OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne<User>()
+            .WithMany()
+            .HasForeignKey(tt => tt.UserId);
     }
 
     private static void ConfigureIndexes(EntityTypeBuilder<TimeTracking> builder)

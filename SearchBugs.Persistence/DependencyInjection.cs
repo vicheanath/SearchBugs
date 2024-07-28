@@ -22,16 +22,16 @@ public static class DependencyInjection
         {
             ConnectionStringOptions connectionStringOptions = serviceProvider.GetService<IOptions<ConnectionStringOptions>>()!.Value;
             options
-                .UseNpgsql(connectionStringOptions,
+                .UseNpgsql(configuration.GetConnectionString("Database"),
                     sqlOptions =>
                     {
                         sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                         sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                     })
-                .UseSnakeCaseNamingConvention();
+            .UseSnakeCaseNamingConvention();
         });
-        services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
-        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
+        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+        services.AddScoped<IUnitOfWork, ApplicationDbContext>();
         services.AddScoped<IBugRepository, BugRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
 

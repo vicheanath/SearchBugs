@@ -1,6 +1,7 @@
-﻿using Shared.Primitives;
+﻿using SearchBugs.Domain.Users;
+using Shared.Primitives;
 
-namespace SearchBugs.Domain.Users;
+namespace SearchBugs.Domain.Roles;
 
 public sealed class Role : Enumeration<Role>
 {
@@ -10,12 +11,15 @@ public sealed class Role : Enumeration<Role>
     public static readonly Role Reporter = new(4, "Reporter");
     public static readonly Role Guest = new(5, "Guest");
 
+    public IReadOnlyCollection<User> Users { get; } = new List<User>();
+
+
     public Role(int id, string name)
         : base(id, name)
     {
     }
 
-    public ICollection<Permission> Permissions { get; set; }
-
-    public ICollection<User> Users { get; set; }
+    private Role()
+    {
+    }
 }

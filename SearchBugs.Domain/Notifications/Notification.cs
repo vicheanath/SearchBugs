@@ -17,19 +17,19 @@ public class Notification : Entity<NotificationId>
     {
     }
 
-    private Notification(NotificationId id, UserId userId, string type, string message, BugId bugId, bool isRead, DateTime createdAt) : base(id)
+    private Notification(NotificationId id, UserId userId, string type, string message, BugId bugId, bool isRead) : base(id)
     {
         UserId = userId;
         Type = type;
         Message = message;
         BugId = bugId;
         IsRead = isRead;
-        CreatedAt = createdAt;
+        CreatedAt = DateTime.UtcNow;
     }
 
-    public static Notification Create(UserId userId, string type, string message, BugId bugId, bool isRead, DateTime createdAt)
+    public static Notification Create(UserId userId, string type, string message, BugId bugId, bool isRead)
     {
         var id = new NotificationId(Guid.NewGuid());
-        return new Notification(id, userId, type, message, bugId, isRead, createdAt);
+        return new Notification(id, userId, type, message, bugId, isRead);
     }
 }

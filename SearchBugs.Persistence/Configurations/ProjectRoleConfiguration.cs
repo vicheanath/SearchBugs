@@ -13,9 +13,9 @@ internal sealed class ProjectRoleConfiguration : IEntityTypeConfiguration<Projec
         builder.HasKey(pr => pr.Id);
         builder.Property(pr => pr.Id);
         builder.Property(pr => pr.Name);
-        builder.HasMany<ProjectRoleUser>()
-            .WithOne()
-            .HasForeignKey(pru => pru.RoleId);
+        builder.HasMany<Project>()
+            .WithMany()
+            .UsingEntity<ProjectRoleUser>();
         builder.HasData(ProjectRole.GetValues());
 
     }

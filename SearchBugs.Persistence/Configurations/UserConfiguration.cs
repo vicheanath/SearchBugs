@@ -19,8 +19,8 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.ToTable(TableNames.Users);
         builder.HasKey(u => u.Id);
         builder.Property(u => u.Id)
-            .HasConversion(id => id.Value, value => new UserId(value))
-            .ValueGeneratedNever();
+            .ValueGeneratedNever()
+            .HasConversion(id => id.Value, value => new UserId(value));
         builder.OwnsOne(u => u.Name, name =>
         {
             name.Property(n => n.FirstName)
@@ -33,24 +33,22 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.OwnsOne(u => u.Email, email =>
         {
             email.Property(e => e.Value)
-                .HasMaxLength(200)
-                .IsRequired();
+                .HasMaxLength(225);
         });
         builder.Property(u => u.Password)
-            .HasMaxLength(200)
-            .IsRequired();
+            .HasMaxLength(200);
     }
 
     private static void ConfigureRelationships(EntityTypeBuilder<User> builder)
     {
-        builder.HasMany(u => u.Roles)
-            .WithMany(r => r.Users)
-            .UsingEntity(j => j.ToTable(TableNames.UserRoles));
+        builder.HasMany(user => user.Roles)
+            .WithMany(role => role.Users)
+            .UsingEntity<UserRole>();
+
     }
 
     private static void ConfigureIndexes(EntityTypeBuilder<User> builder)
     {
-        builder.HasIndex(u => u.Email.Value)
-            .IsUnique();
+
     }
 }

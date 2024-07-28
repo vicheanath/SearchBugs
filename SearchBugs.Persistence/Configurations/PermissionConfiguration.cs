@@ -1,25 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SearchBugs.Domain.Users;
+using SearchBugs.Domain.Roles;
 using SearchBugs.Persistence.Constants;
+using Shared.Extensions;
 
 namespace SearchBugs.Persistence.Configurations;
 
 internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permission>
 {
-    public void Configure(EntityTypeBuilder<Permission> builder)
+
+    public void Configure(EntityTypeBuilder<Permission> builder) =>
+        builder
+            .Tap(ConfigureDataStructure);
+
+    private static void ConfigureDataStructure(EntityTypeBuilder<Permission> builder)
     {
         builder.ToTable(TableNames.Permissions);
-
-        builder.HasKey(x => x.Id);
-
-        builder.Property(x => x.Name)
-            .HasMaxLength(100)
-            .IsRequired();
-        builder.HasMany(x => x.Roles)
-            .WithMany(x => x.Permissions)
-            .UsingEntity<RolePermission>();
-
+        builder.HasKey(permission => permission.Id);
+        builder.Property(permission => permission.Id).ValueGeneratedNever();
+        builder.Property(permission => permission.Name).HasMaxLength(100);
+        builder.Property(permission => permission.Description).HasMaxLength(500);
         builder.HasData(Permission.GetValues());
     }
 }

@@ -21,6 +21,9 @@ internal sealed class AttachmentConfiguration : IEntityTypeConfiguration<Attachm
         builder.Property(a => a.Id)
             .HasConversion(id => id.Value, value => new AttachmentId(value))
             .ValueGeneratedNever();
+        builder.Property(a => a.BugId)
+            .HasConversion(id => id.Value, value => new BugId(value))
+            .IsRequired();
         builder.Property(a => a.FileName)
             .HasMaxLength(200)
             .IsRequired();
@@ -38,8 +41,7 @@ internal sealed class AttachmentConfiguration : IEntityTypeConfiguration<Attachm
     {
         builder.HasOne<Bug>()
             .WithMany(b => b.Attachments)
-            .HasForeignKey(a => a.BugId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey(a => a.BugId);
     }
 
     private static void ConfigureIndexes(EntityTypeBuilder<Attachment> builder)

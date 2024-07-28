@@ -11,4 +11,8 @@ public class BugSeverity : Enumeration<BugSeverity>
     private BugSeverity(int id, string name) : base(id, name)
     {
     }
+
+    private BugSeverity()
+    {
+    }
 }

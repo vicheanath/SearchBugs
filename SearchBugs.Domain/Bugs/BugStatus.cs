@@ -12,4 +12,8 @@ public class BugStatus : Enumeration<BugStatus>
     {
     }
 
+    private BugStatus()
+    {
+    }
+
 }

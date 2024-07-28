@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SearchBugs.Domain.Bugs;
-using SearchBugs.Domain.Projects;
 using SearchBugs.Persistence.Constants;
 using Shared.Extensions;
 
@@ -17,7 +16,7 @@ internal sealed class CustomFieldConfiguration : IEntityTypeConfiguration<Custom
 
     private static void ConfigureDataStructure(EntityTypeBuilder<CustomField> builder)
     {
-        builder.ToTable(TableNames.BugCustomFields);
+        builder.ToTable(TableNames.CustomFields);
         builder.HasKey(cf => cf.Id);
         builder.Property(cf => cf.Id)
             .HasConversion(id => id.Value, value => new CustomFieldId(value))
@@ -32,9 +31,9 @@ internal sealed class CustomFieldConfiguration : IEntityTypeConfiguration<Custom
 
     private static void ConfigureRelationships(EntityTypeBuilder<CustomField> builder)
     {
-        builder.HasOne<Project>()
-            .WithMany()
-            .HasForeignKey(cf => cf.ProjectId);
+        builder.HasMany<BugCustomField>()
+            .WithOne()
+            .HasForeignKey(cfv => cfv.CustomFieldId);
     }
 
     private static void ConfigureIndexes(EntityTypeBuilder<CustomField> builder)

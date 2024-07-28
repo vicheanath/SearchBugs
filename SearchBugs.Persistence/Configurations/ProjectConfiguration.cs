@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SearchBugs.Domain.Bugs;
 using SearchBugs.Domain.Projects;
 using SearchBugs.Persistence.Constants;
 using Shared.Extensions;
@@ -26,8 +27,8 @@ internal sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
             .HasMaxLength(200);
         builder.Property(p => p.Description)
             .HasMaxLength(2000);
-        builder.Property(client => client.CreatedOnUtc).IsRequired();
-        builder.Property(client => client.ModifiedOnUtc).IsRequired(false);
+        builder.Property(p => p.CreatedOnUtc).IsRequired();
+        builder.Property(p => p.ModifiedOnUtc).IsRequired(false);
     }
 
     private static void ConfigureRelationships(EntityTypeBuilder<Project> builder)
@@ -35,8 +36,11 @@ internal sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.HasMany(p => p.Bugs)
             .WithOne()
             .HasForeignKey(b => b.ProjectId);
+        builder.HasMany<CustomField>()
+            .WithOne()
+            .HasForeignKey(cf => cf.ProjectId);
 
-        builder.HasMany(p => p.Users)
+        builder.HasMany(u => u.Users)
             .WithMany()
             .UsingEntity<ProjectRoleUser>();
 

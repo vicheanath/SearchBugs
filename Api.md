@@ -1,5 +1,9 @@
-Certainly! Below is a list of endpoints grouped by their respective domains for the software bug tracking system:
 
+Migrate Script
+
+```
+dotnet ef migrations add InitialCreate -p SearchBugs.Persistence -s SearchBugs.Api
+```
 ### User Management Domain
 
 **Endpoints:**

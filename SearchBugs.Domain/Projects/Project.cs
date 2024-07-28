@@ -8,16 +8,21 @@ public class Project : Entity<ProjectId>, IAuditable
 {
     public string Name { get; private set; }
     public string Description { get; private set; }
-    public List<Bug> Bugs { get; } = new();
-    public List<UserId> Users { get; } = new();
+    public IReadOnlyCollection<User> Users => _users.AsReadOnly();
+    private readonly List<User> _users = new();
+
+    public IReadOnlyCollection<Bug> Bugs => _bugs.AsReadOnly();
+    private readonly List<Bug> _bugs = new();
+
+    public IReadOnlyCollection<CustomField> CustomsFields => _customFields.AsReadOnly();
+
+    private List<CustomField> _customFields = new();
 
     public DateTime CreatedOnUtc { get; private set; }
 
     public DateTime? ModifiedOnUtc { get; private set; }
 
-    public IReadOnlyCollection<CustomField> CustomsFields => _customFields.AsReadOnly();
 
-    private List<CustomField> _customFields = new();
 
     private Project(ProjectId id, string name, string description)
         : base(id)
@@ -43,14 +48,14 @@ public class Project : Entity<ProjectId>, IAuditable
         Description = description;
     }
 
-    public void AddUser(UserId userId)
+    public void AddUser(User user)
     {
-        Users.Add(userId);
+        _users.Add(user);
     }
 
-    public void RemoveUser(UserId userId)
+    public void RemoveUser(User user)
     {
-        Users.Remove(userId);
+        _users.Remove(user);
     }
 
 }

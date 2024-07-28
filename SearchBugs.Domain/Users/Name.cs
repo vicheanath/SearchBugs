@@ -13,6 +13,10 @@ public class Name : ValueObject
         LastName = lastName;
     }
 
+    private Name()
+    {
+    }
+
     public static Name Create(string firstName, string lastName)
     {
         if (string.IsNullOrWhiteSpace(firstName))
