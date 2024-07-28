@@ -10,6 +10,8 @@ internal static class TableNames
     internal const string RolePermissions = "RolePermissions";
 
     internal const string Projects = "Projects";
+    internal const string ProjectRoleUsers = "ProjectRoleUsers";
+    internal const string ProjectRoles = "ProjectRoles";
     internal const string Bugs = "Bugs";
     internal const string Comments = "Comments";
     internal const string Attachments = "Attachments";

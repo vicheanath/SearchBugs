@@ -23,8 +23,7 @@ internal sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
             .HasConversion(id => id.Value, value => new ProjectId(value))
             .ValueGeneratedNever();
         builder.Property(p => p.Name)
-            .HasMaxLength(200)
-            .IsRequired();
+            .HasMaxLength(200);
         builder.Property(p => p.Description)
             .HasMaxLength(2000);
         builder.Property(client => client.CreatedOnUtc).IsRequired();
@@ -33,12 +32,18 @@ internal sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
 
     private static void ConfigureRelationships(EntityTypeBuilder<Project> builder)
     {
+        builder.HasMany(p => p.Bugs)
+            .WithOne()
+            .HasForeignKey(b => b.ProjectId);
+
+        builder.HasMany(p => p.Users)
+            .WithMany()
+            .UsingEntity<ProjectRoleUser>();
 
     }
 
     private static void ConfigureIndexes(EntityTypeBuilder<Project> builder)
     {
-        builder.HasIndex(p => p.Name)
-            .IsUnique();
+
     }
 }

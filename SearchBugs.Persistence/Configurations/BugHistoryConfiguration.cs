@@ -23,30 +23,27 @@ internal sealed class BugHistoryConfiguration : IEntityTypeConfiguration<BugHist
             .HasConversion(id => id.Value, value => new HistoryId(value))
             .ValueGeneratedNever();
         builder.Property(h => h.BugId)
-            .HasConversion(id => id.Value, value => new BugId(value))
-            .IsRequired();
+            .HasConversion(id => id.Value, value => new BugId(value));
         builder.Property(h => h.ChangedBy)
-            .HasConversion(id => id.Value, value => new UserId(value))
-            .IsRequired();
+            .HasConversion(id => id.Value, value => new UserId(value));
         builder.Property(h => h.FieldChanged)
-            .HasMaxLength(200)
-            .IsRequired();
+            .HasMaxLength(200);
         builder.Property(h => h.OldValue)
-            .HasMaxLength(2000)
-            .IsRequired();
+            .HasMaxLength(2000);
         builder.Property(h => h.NewValue)
-            .HasMaxLength(2000)
-            .IsRequired();
-        builder.Property(h => h.ChangedAt)
-            .IsRequired();
+            .HasMaxLength(2000);
+        builder.Property(h => h.ChangedAtUtc);
     }
 
     private static void ConfigureRelationships(EntityTypeBuilder<BugHistory> builder)
     {
-        builder.HasOne(h => h.Bug)
+        builder.HasOne<Bug>()
             .WithMany(b => b.BugHistories)
             .HasForeignKey(h => h.BugId)
             .OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne<User>()
+            .WithMany()
+            .HasForeignKey(h => h.ChangedBy);
     }
 
     private static void ConfigureIndexes(EntityTypeBuilder<BugHistory> builder)

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SearchBugs.Domain.Bugs;
+using SearchBugs.Domain.Projects;
+using SearchBugs.Domain.Users;
 using SearchBugs.Persistence.Constants;
 using Shared.Extensions;
 
@@ -38,19 +40,41 @@ internal sealed class BugConfiguration : IEntityTypeConfiguration<Bug>
 
     private static void ConfigureRelationships(EntityTypeBuilder<Bug> builder)
     {
-        //builder.HasOne(b => b.Project)
-        //    .WithMany(p => p.Bugs)
-        //    .HasForeignKey(b => b.ProjectId)
-        //    .OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne<Project>()
+            .WithMany()
+            .HasForeignKey(b => b.ProjectId);
         builder.HasOne(b => b.Status)
             .WithMany()
-            .IsRequired();
+            .HasForeignKey(b => b.StatusId);
         builder.HasOne(b => b.Priority)
             .WithMany()
-            .IsRequired();
-        builder.HasOne(b => b.ProjectId)
+            .HasForeignKey(b => b.PriorityId);
+        builder.HasOne<User>()
             .WithMany()
-            .IsRequired();
+            .HasForeignKey(b => b.AssigneeId);
+        builder.HasOne<User>()
+            .WithMany()
+            .HasForeignKey(b => b.ReporterId);
+
+        builder.HasMany(b => b.Comments)
+            .WithOne()
+            .HasForeignKey(c => c.BugId);
+
+        builder.HasMany(b => b.Attachments)
+            .WithOne()
+            .HasForeignKey(a => a.BugId);
+
+        builder.HasMany(b => b.BugHistories)
+            .WithOne()
+            .HasForeignKey(h => h.BugId);
+
+        builder.HasMany(b => b.BugCustomFields)
+            .WithOne()
+            .HasForeignKey(c => c.BugId);
+
+        builder.HasMany(b => b.TimeTracking)
+            .WithOne()
+            .HasForeignKey(t => t.BugId);
     }
 
     private static void ConfigureIndexes(EntityTypeBuilder<Bug> builder)

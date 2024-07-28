@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SearchBugs.Domain.Users;
+using SearchBugs.Persistence.Constants;
 
 
 namespace SearchBugs.Persistence.Configurations;
@@ -11,6 +12,7 @@ internal sealed class RolePermissionConfiguration
 {
     public void Configure(EntityTypeBuilder<RolePermission> builder)
     {
+        builder.ToTable(TableNames.RolePermissions);
         builder.HasKey(x => new { x.RoleId, x.PermissionId });
 
         builder.HasData(
