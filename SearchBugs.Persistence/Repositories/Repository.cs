@@ -20,9 +20,9 @@ internal abstract class Repository<TEntity, TEntityId>
             .SingleOrDefaultAsync(p => p.Id == id);
     }
 
-    public void Add(TEntity entity)
+    public async Task Add(TEntity entity)
     {
-        DbContext.Set<TEntity>().Add(entity);
+        await DbContext.Set<TEntity>().AddAsync(entity);
     }
 
     public void Update(TEntity entity)

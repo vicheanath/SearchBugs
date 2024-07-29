@@ -30,6 +30,6 @@ public class Email : ValueObject
         yield return Value;
     }
 
-    public static implicit operator string(Email email) => email.Value;
-    public static implicit operator Email(string value) => Create(value);
+    //public static implicit operator string(Email email) => email.Value;
+    //public static implicit operator Email(string value) => Create(value);
 }

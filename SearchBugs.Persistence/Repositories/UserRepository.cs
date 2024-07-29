@@ -1,4 +1,5 @@
-﻿using SearchBugs.Domain.Users;
+﻿using Microsoft.EntityFrameworkCore;
+using SearchBugs.Domain.Users;
 using Shared.Results;
 
 namespace SearchBugs.Persistence.Repositories;
@@ -8,9 +9,6 @@ internal sealed class UserRepository : Repository<User, UserId>, IUserRepository
     public UserRepository(ApplicationDbContext dbContext) : base(dbContext)
     {
     }
-
-    public Task<Result<User>> GetUserByEmailAsync(Email email, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<Result<User>> GetUserByEmailAsync(string email, CancellationToken cancellationToken) =>
+          Result.Create(await DbContext.Users.FirstOrDefaultAsync(user => user.Email.Value == email, cancellationToken));
 }

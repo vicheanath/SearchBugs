@@ -20,7 +20,6 @@ public static class AuthenticationsEndpoints
         auth.MapPost("register", Register).WithName(nameof(Register));
     }
 
-
     public static async Task<IResult> Login(LoginRequest req, ISender sender)
     {
         var command = new LoginCommand(req.Email, req.Password);

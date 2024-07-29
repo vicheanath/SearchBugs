@@ -30,8 +30,8 @@ public static class DependencyInjection
                     })
             .UseSnakeCaseNamingConvention();
         });
-        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-        services.AddScoped<IUnitOfWork, ApplicationDbContext>();
+        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+        services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
         services.AddScoped<IBugRepository, BugRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
 
