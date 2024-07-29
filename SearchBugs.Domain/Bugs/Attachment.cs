@@ -8,7 +8,6 @@ public class Attachment : Entity<AttachmentId>, IAuditable
     public string ContentType { get; set; }
     public byte[] Content { get; set; }
     public BugId BugId { get; set; }
-    public Bug Bug { get; set; }
     public DateTime CreatedOnUtc { get; set; }
 
     public DateTime? ModifiedOnUtc { get; set; }

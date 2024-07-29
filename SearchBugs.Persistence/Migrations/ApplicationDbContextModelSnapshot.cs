@@ -32,10 +32,6 @@ namespace SearchBugs.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("bug_id");
 
-                    b.Property<Guid>("BugId1")
-                        .HasColumnType("uuid")
-                        .HasColumnName("bug_id1");
-
                     b.Property<byte[]>("Content")
                         .IsRequired()
                         .HasColumnType("bytea")
@@ -66,9 +62,6 @@ namespace SearchBugs.Persistence.Migrations
 
                     b.HasIndex("BugId")
                         .HasDatabaseName("ix_attachment_bug_id");
-
-                    b.HasIndex("BugId1")
-                        .HasDatabaseName("ix_attachment_bug_id1");
 
                     b.ToTable("attachment", (string)null);
                 });
@@ -160,17 +153,9 @@ namespace SearchBugs.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("bug_id");
 
-                    b.Property<Guid?>("BugId1")
-                        .HasColumnType("uuid")
-                        .HasColumnName("bug_id1");
-
                     b.Property<Guid>("CustomFieldId")
                         .HasColumnType("uuid")
                         .HasColumnName("custom_field_id");
-
-                    b.Property<Guid?>("CustomFieldId1")
-                        .HasColumnType("uuid")
-                        .HasColumnName("custom_field_id1");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -184,14 +169,8 @@ namespace SearchBugs.Persistence.Migrations
                     b.HasIndex("BugId")
                         .HasDatabaseName("ix_bug_custom_field_bug_id");
 
-                    b.HasIndex("BugId1")
-                        .HasDatabaseName("ix_bug_custom_field_bug_id1");
-
                     b.HasIndex("CustomFieldId")
                         .HasDatabaseName("ix_bug_custom_field_custom_field_id");
-
-                    b.HasIndex("CustomFieldId1")
-                        .HasDatabaseName("ix_bug_custom_field_custom_field_id1");
 
                     b.ToTable("bug_custom_field", (string)null);
                 });
@@ -385,10 +364,6 @@ namespace SearchBugs.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("project_id");
 
-                    b.Property<Guid?>("ProjectId1")
-                        .HasColumnType("uuid")
-                        .HasColumnName("project_id1");
-
                     b.HasKey("Id")
                         .HasName("pk_custom_field");
 
@@ -397,9 +372,6 @@ namespace SearchBugs.Persistence.Migrations
 
                     b.HasIndex("ProjectId")
                         .HasDatabaseName("ix_custom_field_project_id");
-
-                    b.HasIndex("ProjectId1")
-                        .HasDatabaseName("ix_custom_field_project_id1");
 
                     b.ToTable("custom_field", (string)null);
                 });
@@ -1536,15 +1508,6 @@ namespace SearchBugs.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_attachment_bug_bug_id");
-
-                    b.HasOne("SearchBugs.Domain.Bugs.Bug", "Bug")
-                        .WithMany()
-                        .HasForeignKey("BugId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_attachment_bug_bug_id1");
-
-                    b.Navigation("Bug");
                 });
 
             modelBuilder.Entity("SearchBugs.Domain.Bugs.Bug", b =>
@@ -1591,29 +1554,23 @@ namespace SearchBugs.Persistence.Migrations
 
             modelBuilder.Entity("SearchBugs.Domain.Bugs.BugCustomField", b =>
                 {
-                    b.HasOne("SearchBugs.Domain.Bugs.Bug", null)
-                        .WithMany()
+                    b.HasOne("SearchBugs.Domain.Bugs.Bug", "Bug")
+                        .WithMany("BugCustomFields")
                         .HasForeignKey("BugId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_bug_custom_field_bug_bug_id");
 
-                    b.HasOne("SearchBugs.Domain.Bugs.Bug", null)
+                    b.HasOne("SearchBugs.Domain.Bugs.CustomField", "CustomField")
                         .WithMany("BugCustomFields")
-                        .HasForeignKey("BugId1")
-                        .HasConstraintName("fk_bug_custom_field_bug_bug_id1");
-
-                    b.HasOne("SearchBugs.Domain.Bugs.CustomField", null)
-                        .WithMany()
                         .HasForeignKey("CustomFieldId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_bug_custom_field_custom_field_custom_field_id");
 
-                    b.HasOne("SearchBugs.Domain.Bugs.CustomField", null)
-                        .WithMany("BugCustomFields")
-                        .HasForeignKey("CustomFieldId1")
-                        .HasConstraintName("fk_bug_custom_field_custom_field_custom_field_id1");
+                    b.Navigation("Bug");
+
+                    b.Navigation("CustomField");
                 });
 
             modelBuilder.Entity("SearchBugs.Domain.Bugs.BugHistory", b =>
@@ -1652,17 +1609,14 @@ namespace SearchBugs.Persistence.Migrations
 
             modelBuilder.Entity("SearchBugs.Domain.Bugs.CustomField", b =>
                 {
-                    b.HasOne("SearchBugs.Domain.Projects.Project", null)
-                        .WithMany()
+                    b.HasOne("SearchBugs.Domain.Projects.Project", "Project")
+                        .WithMany("CustomsFields")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_custom_field_project_project_id");
 
-                    b.HasOne("SearchBugs.Domain.Projects.Project", null)
-                        .WithMany("CustomsFields")
-                        .HasForeignKey("ProjectId1")
-                        .HasConstraintName("fk_custom_field_project_project_id1");
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("SearchBugs.Domain.Bugs.TimeTracking", b =>

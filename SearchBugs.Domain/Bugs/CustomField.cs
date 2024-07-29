@@ -7,7 +7,7 @@ public class CustomField : Entity<CustomFieldId>
     public string Name { get; set; }
     public string FieldType { get; set; }
     public ProjectId ProjectId { get; set; }
-
+    public Project Project { get; set; }
     public IReadOnlyCollection<BugCustomField> BugCustomFields => _bugCustomFields.AsReadOnly();
 
     private List<BugCustomField> _bugCustomFields = new();

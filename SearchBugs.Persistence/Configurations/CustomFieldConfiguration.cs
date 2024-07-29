@@ -31,9 +31,9 @@ internal sealed class CustomFieldConfiguration : IEntityTypeConfiguration<Custom
 
     private static void ConfigureRelationships(EntityTypeBuilder<CustomField> builder)
     {
-        builder.HasMany<BugCustomField>()
-            .WithOne()
-            .HasForeignKey(cfv => cfv.CustomFieldId);
+        builder.HasOne(cf => cf.Project)
+            .WithMany(c => c.CustomsFields)
+            .HasForeignKey(cf => cf.ProjectId);
     }
 
     private static void ConfigureIndexes(EntityTypeBuilder<CustomField> builder)

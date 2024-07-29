@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SearchBugs.Domain.Bugs;
 using SearchBugs.Domain.Projects;
 using SearchBugs.Persistence.Constants;
 using Shared.Extensions;
@@ -36,9 +35,6 @@ internal sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.HasMany(p => p.Bugs)
             .WithOne()
             .HasForeignKey(b => b.ProjectId);
-        builder.HasMany<CustomField>()
-            .WithOne()
-            .HasForeignKey(cf => cf.ProjectId);
 
         builder.HasMany(u => u.Users)
             .WithMany()

@@ -40,8 +40,7 @@ internal sealed class AttachmentConfiguration : IEntityTypeConfiguration<Attachm
     private static void ConfigureRelationships(EntityTypeBuilder<Attachment> builder)
     {
         builder.HasOne<Bug>()
-            .WithMany(b => b.Attachments)
-            .HasForeignKey(a => a.BugId);
+            .WithMany(b => b.Attachments);
     }
 
     private static void ConfigureIndexes(EntityTypeBuilder<Attachment> builder)

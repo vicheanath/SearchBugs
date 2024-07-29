@@ -6,6 +6,9 @@ public class BugCustomField : Entity<BugCustomFieldId>
 {
     public BugId BugId { get; set; }
     public CustomFieldId CustomFieldId { get; set; }
+
+    public CustomField CustomField { get; set; }
+    public Bug Bug { get; set; }
     public string Value { get; set; }
 
 

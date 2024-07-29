@@ -117,8 +117,7 @@ namespace SearchBugs.Persistence.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     field_type = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    project_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    project_id1 = table.Column<Guid>(type: "uuid", nullable: true)
+                    project_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -129,11 +128,6 @@ namespace SearchBugs.Persistence.Migrations
                         principalTable: "project",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "fk_custom_field_project_project_id1",
-                        column: x => x.project_id1,
-                        principalTable: "project",
-                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -299,7 +293,6 @@ namespace SearchBugs.Persistence.Migrations
                     content_type = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     content = table.Column<byte[]>(type: "bytea", nullable: false),
                     bug_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    bug_id1 = table.Column<Guid>(type: "uuid", nullable: false),
                     created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modified_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -312,12 +305,6 @@ namespace SearchBugs.Persistence.Migrations
                         principalTable: "bug",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "fk_attachment_bug_bug_id1",
-                        column: x => x.bug_id1,
-                        principalTable: "bug",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -327,9 +314,7 @@ namespace SearchBugs.Persistence.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     bug_id = table.Column<Guid>(type: "uuid", nullable: false),
                     custom_field_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    value = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                    bug_id1 = table.Column<Guid>(type: "uuid", nullable: true),
-                    custom_field_id1 = table.Column<Guid>(type: "uuid", nullable: true)
+                    value = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -341,21 +326,11 @@ namespace SearchBugs.Persistence.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_bug_custom_field_bug_bug_id1",
-                        column: x => x.bug_id1,
-                        principalTable: "bug",
-                        principalColumn: "id");
-                    table.ForeignKey(
                         name: "fk_bug_custom_field_custom_field_custom_field_id",
                         column: x => x.custom_field_id,
                         principalTable: "custom_field",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "fk_bug_custom_field_custom_field_custom_field_id1",
-                        column: x => x.custom_field_id1,
-                        principalTable: "custom_field",
-                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -697,11 +672,6 @@ namespace SearchBugs.Persistence.Migrations
                 column: "bug_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_attachment_bug_id1",
-                table: "attachment",
-                column: "bug_id1");
-
-            migrationBuilder.CreateIndex(
                 name: "ix_bug_assignee_id",
                 table: "bug",
                 column: "assignee_id");
@@ -738,19 +708,9 @@ namespace SearchBugs.Persistence.Migrations
                 column: "bug_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_bug_custom_field_bug_id1",
-                table: "bug_custom_field",
-                column: "bug_id1");
-
-            migrationBuilder.CreateIndex(
                 name: "ix_bug_custom_field_custom_field_id",
                 table: "bug_custom_field",
                 column: "custom_field_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_bug_custom_field_custom_field_id1",
-                table: "bug_custom_field",
-                column: "custom_field_id1");
 
             migrationBuilder.CreateIndex(
                 name: "ix_bug_history_bug_id",
@@ -791,11 +751,6 @@ namespace SearchBugs.Persistence.Migrations
                 name: "ix_custom_field_project_id",
                 table: "custom_field",
                 column: "project_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_custom_field_project_id1",
-                table: "custom_field",
-                column: "project_id1");
 
             migrationBuilder.CreateIndex(
                 name: "ix_notification_bug_id",
