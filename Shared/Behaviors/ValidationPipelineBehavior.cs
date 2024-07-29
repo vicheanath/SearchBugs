@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
-using Shared.Exceptions;
+using Shared.Errors;
+using Shared.Infrastructure;
 using Shared.Messaging;
 using Shared.Results;
 
@@ -12,37 +13,30 @@ public sealed class ValidationPipelineBehavior<TRequest, TResponse> : IPipelineB
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
 
-    public ValidationPipelineBehavior(IEnumerable<IValidator<TRequest>> validators)
+    public ValidationPipelineBehavior(IEnumerable<IValidator<TRequest>> validators) => _validators = validators;
+
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        _validators = validators;
-    }
+        if (!_validators.Any())
+        {
+            return await next();
+        }
 
-    public async Task<TResponse> Handle(
-        TRequest request,
-        RequestHandlerDelegate<TResponse> next,
-        CancellationToken cancellationToken)
-    {
-        // Validate
-        var context = new ValidationContext<TRequest>(request);
-
-        var validationFailures = await Task.WhenAll(
-            _validators.Select(validator => validator.ValidateAsync(context)));
-
-        var errors = validationFailures
-            .Where(validationResult => !validationResult.IsValid)
-            .SelectMany(validationResult => validationResult.Errors)
-            .Select(validationFailure => new ValidationError(
-                validationFailure.PropertyName,
-                validationFailure.ErrorMessage))
-            .ToList();
+        Error[] errors = Validate(new ValidationContext<TRequest>(request));
 
         if (errors.Any())
         {
-            throw new Exceptions.ValidationException(errors);
+            return ValidationResultFactory.Create<TResponse>(errors);
         }
 
-        var response = await next();
-
-        return response;
+        return await next();
     }
+
+    private Error[] Validate(IValidationContext validationContext) =>
+        _validators.Select(validator => validator.Validate(validationContext))
+            .SelectMany(validationResult => validationResult.Errors)
+            .Where(validationFailure => validationFailure is not null)
+            .Select(validationFailure => new Error(validationFailure.ErrorCode, validationFailure.ErrorMessage))
+            .Distinct()
+            .ToArray();
 }
