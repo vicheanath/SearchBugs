@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SearchBugs.Domain;
 using SearchBugs.Domain.Bugs;
+using SearchBugs.Domain.Notifications;
 using SearchBugs.Domain.Projects;
 using SearchBugs.Domain.Roles;
 using SearchBugs.Domain.Users;
@@ -20,7 +21,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWor
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //modelBuilder.HasDefaultSchema(Schemas.BugsSearch);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 
@@ -34,12 +34,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWor
     public DbSet<Comment> Comments { get; private set; }
     public DbSet<Attachment> Attachments { get; private set; }
     public DbSet<BugCustomField> BugCustomFields { get; private set; }
-
     public DbSet<CustomField> CustomFields { get; private set; }
-
-
-    //public DbSet<Notification> Notifications { get; private set; }
-
+    public DbSet<Notification> Notifications { get; private set; }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {

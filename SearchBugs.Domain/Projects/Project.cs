@@ -1,6 +1,7 @@
 ﻿using SearchBugs.Domain.Bugs;
 using SearchBugs.Domain.Users;
 using Shared.Primitives;
+using Shared.Time;
 
 namespace SearchBugs.Domain.Projects;
 
@@ -24,11 +25,12 @@ public class Project : Entity<ProjectId>, IAuditable
 
 
 
-    private Project(ProjectId id, string name, string description)
-        : base(id)
+    private Project(ProjectId id, string name, string description, DateTime createdOnUtc) : base(id)
+
     {
         Name = name;
         Description = description;
+        CreatedOnUtc = createdOnUtc;
     }
 
     private Project()
@@ -39,7 +41,7 @@ public class Project : Entity<ProjectId>, IAuditable
     public static Project Create(string name, string description)
     {
         var id = new ProjectId(Guid.NewGuid());
-        return new Project(id, name, description);
+        return new Project(id, name, description, SystemTime.UtcNow);
     }
 
     public void Update(string name, string description)

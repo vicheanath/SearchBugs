@@ -26,6 +26,7 @@ if (app.Environment.IsDevelopment())
 }
 app.MapAuthenticationsEndpoints();
 app.MapBugsEndpoints();
+app.MapUserEndpoints();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

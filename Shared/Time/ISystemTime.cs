@@ -8,5 +8,5 @@ public interface ISystemTime
     /// <summary>
     /// Gets the current UTC date and time.
     /// </summary>
-    DateTime UtcNow { get; }
+    public static DateTime UtcNow { get; }
 }

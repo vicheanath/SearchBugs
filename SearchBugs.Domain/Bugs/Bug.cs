@@ -2,6 +2,7 @@
 using SearchBugs.Domain.Users;
 using Shared.Primitives;
 using Shared.Results;
+using Shared.Time;
 
 namespace SearchBugs.Domain.Bugs;
 
@@ -40,8 +41,7 @@ public class Bug : Entity<BugId>, IAuditable
     private readonly List<TimeTracking> _timeTracking = new();
 
 
-    private Bug(BugId id, string title, string description, BugStatus status, BugPriority priority, string severity, ProjectId projectId, UserId assigneeId, UserId reporterId)
-        : base(id)
+    private Bug(BugId id, string title, string description, BugStatus status, BugPriority priority, string severity, ProjectId projectId, UserId assigneeId, UserId reporterId, DateTime createdOnUtc) : base(id)
     {
         Title = title;
         Description = description;
@@ -51,6 +51,7 @@ public class Bug : Entity<BugId>, IAuditable
         ProjectId = projectId;
         AssigneeId = assigneeId;
         ReporterId = reporterId;
+        CreatedOnUtc = createdOnUtc;
     }
 
     private Bug()
@@ -60,7 +61,8 @@ public class Bug : Entity<BugId>, IAuditable
 
     public static Result<Bug> Create(string title, string description, BugStatus status, BugPriority priority, string severity, ProjectId projectId, UserId assigneeId, UserId reporterId)
     {
-        return Result.Create(new Bug(new BugId(Guid.NewGuid()), title, description, status, priority, severity, projectId, assigneeId, reporterId));
+        BugId bugId = new(Guid.NewGuid());
+        return Result.Create(new Bug(bugId, title, description, status, priority, severity, projectId, assigneeId, reporterId, SystemTime.UtcNow));
     }
 
     public void AddComment(Comment comment)

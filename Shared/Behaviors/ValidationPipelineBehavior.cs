@@ -2,13 +2,12 @@
 using MediatR;
 using Shared.Errors;
 using Shared.Infrastructure;
-using Shared.Messaging;
 using Shared.Results;
 
 namespace Shared.Behaviors;
 
 public sealed class ValidationPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : ICommand<TResponse>
+    where TRequest : IRequest<TResponse>
     where TResponse : Result
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;

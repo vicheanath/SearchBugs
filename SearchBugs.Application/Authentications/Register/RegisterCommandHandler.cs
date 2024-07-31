@@ -1,4 +1,5 @@
 ﻿using SearchBugs.Domain;
+using SearchBugs.Domain.Roles;
 using SearchBugs.Domain.Services;
 using SearchBugs.Domain.Users;
 using Shared.Messaging;
@@ -19,14 +20,22 @@ internal sealed class RegisterCommandHandler : ICommandHandler<RegisterCommand>
         this.passwordHashingService = passwordHashingService;
         _unitOfWork = unitOfWork;
     }
+
     public async Task<Result> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        Email email = Email.Create(request.Email);
-        Name name = Name.Create(request.FirstName, request.LastName);
-        string password = passwordHashingService.HashPassword(request.Password);
-        var user = User.Create(name, email, password);
-        await _userRepository.Add(user);
+        var user = User.Create(
+                Name.Create(request.FirstName, request.LastName),
+                Email.Create(request.Email),
+                passwordHashingService.HashPassword(request.Password));
+
+        var role = await _userRepository.GetRoleByIdAsync(Role.Guest.Id, cancellationToken);
+        user.Value.AddRole(role.Value);
+        await _userRepository.Add(user.Value);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success();
+
     }
+
+    private async Task<Result<User>> CheckIfEmailIsUniqueAsync(User user, CancellationToken cancellationToken) =>
+                await _userRepository.IsEmailUniqueAsync(user.Email, cancellationToken);
 }

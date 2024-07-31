@@ -9,7 +9,6 @@ using SearchBugs.Persistence.Repositories;
 using Shared.Data;
 using Shared.Options;
 
-
 namespace SearchBugs.Persistence;
 
 public static class DependencyInjection
@@ -22,7 +21,7 @@ public static class DependencyInjection
         {
             ConnectionStringOptions connectionStringOptions = serviceProvider.GetService<IOptions<ConnectionStringOptions>>()!.Value;
             options
-                .UseNpgsql(configuration.GetConnectionString("Database"),
+                .UseNpgsql(connectionStringOptions,
                     sqlOptions =>
                     {
                         sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);

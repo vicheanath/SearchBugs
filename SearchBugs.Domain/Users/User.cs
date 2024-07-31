@@ -1,5 +1,7 @@
 ﻿using SearchBugs.Domain.Roles;
 using Shared.Primitives;
+using Shared.Results;
+using Shared.Time;
 
 namespace SearchBugs.Domain.Users;
 
@@ -11,28 +13,24 @@ public class User : Entity<UserId>, IAuditable
     public IReadOnlyCollection<Role> Roles => _roles.ToList().AsReadOnly();
     private readonly HashSet<Role> _roles = new();
     public DateTime CreatedOnUtc { get; private set; }
-
     public DateTime? ModifiedOnUtc { get; private set; }
 
 
-
-
-    private User(UserId id, Name name, Email email, string password)
-        : base(id)
+    private User(UserId id, Name name, Email email, string password, DateTime createdOnUtc) : base(id)
     {
         Name = name;
         Email = email;
         Password = password;
+        CreatedOnUtc = createdOnUtc;
     }
 
-    private User()
-    {
-    }
+    private User() { }
 
-    public static User Create(Name name, Email email, string password)
+    public static Result<User> Create(Name name, Email email, string password)
     {
         var id = new UserId(Guid.NewGuid());
-        return new User(id, name, email, password);
+        var user = new User(id, name, email, password, SystemTime.UtcNow);
+        return user;
     }
 
     public void Update(Name name, Email email)
@@ -44,6 +42,11 @@ public class User : Entity<UserId>, IAuditable
     public void ChangePassword(string password)
     {
         Password = password;
+    }
+
+    public void AddRole(Role role)
+    {
+        _roles.Add(role);
     }
 
 }

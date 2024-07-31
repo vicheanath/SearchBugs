@@ -9,6 +9,7 @@ public class JwtOptions
     [Required]
     public string Audience { get; set; }
     [Required]
+    [MinLength(16)]
     public string Secret { get; set; }
     [Required]
     [Range(1, int.MaxValue)]

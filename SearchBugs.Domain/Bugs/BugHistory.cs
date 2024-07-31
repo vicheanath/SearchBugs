@@ -1,5 +1,6 @@
 ﻿using SearchBugs.Domain.Users;
 using Shared.Primitives;
+using Shared.Time;
 
 namespace SearchBugs.Domain.Bugs;
 public class BugHistory : Entity<HistoryId>
@@ -26,9 +27,9 @@ public class BugHistory : Entity<HistoryId>
         ChangedAtUtc = changedAt;
     }
 
-    public static BugHistory Create(BugId bugId, UserId changedBy, string fieldChanged, string oldValue, string newValue, DateTime changedAt)
+    public static BugHistory Create(BugId bugId, UserId changedBy, string fieldChanged, string oldValue, string newValue)
     {
         var id = new HistoryId(Guid.NewGuid());
-        return new BugHistory(id, bugId, changedBy, fieldChanged, oldValue, newValue, changedAt);
+        return new BugHistory(id, bugId, changedBy, fieldChanged, oldValue, newValue, SystemTime.UtcNow);
     }
 }

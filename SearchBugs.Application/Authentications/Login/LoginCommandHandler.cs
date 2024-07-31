@@ -27,14 +27,12 @@ internal sealed class LoginCommandHandler : ICommandHandler<LoginCommand, LoginR
         if (user.IsFailure)
             return Result.Failure<LoginResponse>(UserErrors.NotFoundByEmail(email.Value));
 
-        if (!isPasswordValid(request.Password, user.Value.Password))
+        if (!IsPasswordValid(request.Password, user.Value.Password))
             return Result.Failure<LoginResponse>(UserErrors.InvalidPassword);
         string jwtToken = _jwtProvider.GenerateJwtToken(user.Value);
         return Result.Success(new LoginResponse(jwtToken));
     }
 
-    private bool isPasswordValid(string password, string hashedPassword)
-    {
-        return passwordHashingService.VerifyPassword(password, hashedPassword);
-    }
+    private bool IsPasswordValid(string password, string hashedPassword) => passwordHashingService.VerifyPassword(password, hashedPassword);
+
 }

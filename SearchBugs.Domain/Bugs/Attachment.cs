@@ -1,4 +1,5 @@
 ﻿using Shared.Primitives;
+using Shared.Time;
 
 namespace SearchBugs.Domain.Bugs;
 
@@ -12,12 +13,13 @@ public class Attachment : Entity<AttachmentId>, IAuditable
 
     public DateTime? ModifiedOnUtc { get; set; }
 
-    private Attachment(AttachmentId id, string fileName, string contentType, byte[] content, BugId bugId) : base(id)
+    private Attachment(AttachmentId id, string fileName, string contentType, byte[] content, BugId bugId, DateTime createdOnUtc) : base(id)
     {
         FileName = fileName;
         ContentType = contentType;
         Content = content;
         BugId = bugId;
+        CreatedOnUtc = createdOnUtc;
     }
 
     private Attachment()
@@ -28,6 +30,7 @@ public class Attachment : Entity<AttachmentId>, IAuditable
     public static Attachment Create(string fileName, string contentType, byte[] content, BugId bugId)
     {
         var id = new AttachmentId(Guid.NewGuid());
-        return new Attachment(id, fileName, contentType, content, bugId);
+
+        return new Attachment(id, fileName, contentType, content, bugId, SystemTime.UtcNow);
     }
 }

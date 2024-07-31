@@ -1,4 +1,5 @@
-﻿using Shared.Data;
+﻿
+using Shared.Data;
 using Shared.Messaging;
 using Shared.Results;
 
@@ -17,12 +18,11 @@ public sealed class GetBugsQueryHandler : IQueryHandler<GetBugsQuery, List<BugsR
             .Map(bugs => bugs.ToList());
 
 
-    public async Task<IEnumerable<BugsResponse>> GetBugsByProjectIdAsync(Guid projectId)
-    {
-        var query = @"
+    public async Task<IEnumerable<BugsResponse>?> GetBugsByProjectIdAsync(Guid projectId) =>
+        await _sqlQueryExecutor.QueryAsync<BugsResponse>(@"
             SELECT 
-                b.Title,
-                b.Description,
+                b.title as Title,
+                b.description as Description,
                 b.Status,
                 b.Priority,
                 b.Severity,
@@ -33,11 +33,5 @@ public sealed class GetBugsQueryHandler : IQueryHandler<GetBugsQuery, List<BugsR
                 b.UpdatedAt
             FROM Bugs b
             WHERE b.ProjectId = @ProjectId
-            ORDER BY b.CreatedAt DESC";
-
-        var bugs = await _sqlQueryExecutor.QueryAsync<BugsResponse>(query, new { projectId });
-
-        return bugs;
-
-    }
+            ORDER BY b.CreatedAt DESC", new { projectId });
 }

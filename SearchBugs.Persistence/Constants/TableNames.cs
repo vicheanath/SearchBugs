@@ -23,7 +23,6 @@ internal static class TableNames
     internal const string ProjectUsers = "project_user";
     internal const string BugAttachments = "bug_attachment";
     internal const string Notifications = "notification";
-
     internal const string BugRepository = "bug_repository";
     internal const string Repository = "repository";
 

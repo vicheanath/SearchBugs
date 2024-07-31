@@ -1,5 +1,6 @@
 ﻿using SearchBugs.Domain.Users;
 using Shared.Primitives;
+using Shared.Time;
 
 namespace SearchBugs.Domain.Bugs;
 
@@ -18,16 +19,18 @@ public class Comment : Entity<CommentId>, IAuditable
 
     }
 
-    private Comment(CommentId id, BugId bugId, UserId userId, string commentText) : base(id)
+    private Comment(CommentId id, BugId bugId, UserId userId, string commentText, DateTime createdOnUtc) : base(id)
     {
         BugId = bugId;
         UserId = userId;
         CommentText = commentText;
+        CreatedOnUtc = createdOnUtc;
     }
 
     public static Comment Create(BugId bugId, UserId userId, string commentText)
     {
         var id = new CommentId(Guid.NewGuid());
-        return new Comment(id, bugId, userId, commentText);
+
+        return new Comment(id, bugId, userId, commentText, SystemTime.UtcNow);
     }
 }
