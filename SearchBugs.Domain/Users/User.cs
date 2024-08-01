@@ -1,4 +1,5 @@
 ﻿using SearchBugs.Domain.Roles;
+using SearchBugs.Domain.Users.Events;
 using Shared.Primitives;
 using Shared.Results;
 using Shared.Time;
@@ -33,10 +34,15 @@ public class User : Entity<UserId>, IAuditable
         return user;
     }
 
-    public void Update(Name name, Email email)
+    public void Update(Name name)
     {
+        var userInformationChanged = Name != name;
         Name = name;
-        Email = email;
+        if (userInformationChanged)
+        {
+            ModifiedOnUtc = SystemTime.UtcNow;
+        }
+        RaiseDomainEvent(new UserUpdatedEvent(Guid.NewGuid(), SystemTime.UtcNow, Id, Name, Email));
     }
 
     public void ChangePassword(string password)
