@@ -27,13 +27,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{3D6F2D6C-C925-4D72-B84F-9371FF4AFDFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchBugs.Application.UnitTests", "SearchBugs.Application.UnitTests\SearchBugs.Application.UnitTests.csproj", "{25ED865B-5AEB-47FF-8242-03971ECA1426}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SearchBugs.Application.UnitTests", "SearchBugs.Application.UnitTests\SearchBugs.Application.UnitTests.csproj", "{25ED865B-5AEB-47FF-8242-03971ECA1426}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2718D6F7-5AEC-4B08-9241-1641A9944B09} = {2718D6F7-5AEC-4B08-9241-1641A9944B09}
+		{83894DF2-E283-4C8D-A336-FE1773BF8C0E} = {83894DF2-E283-4C8D-A336-FE1773BF8C0E}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchBugs.Domain.UnitTests", "SearchBugs.Domain.UnitTests\SearchBugs.Domain.UnitTests.csproj", "{4789BAED-FBB0-4F94-8F0A-B60EC82A4947}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SearchBugs.Domain.UnitTests", "SearchBugs.Domain.UnitTests\SearchBugs.Domain.UnitTests.csproj", "{4789BAED-FBB0-4F94-8F0A-B60EC82A4947}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchBugs.Infrastructure.UnitTests", "SearchBugs.Infrastructure.UnitTests\SearchBugs.Infrastructure.UnitTests.csproj", "{9A64B6F5-37EC-4938-BA12-0C69427FEB99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SearchBugs.Infrastructure.UnitTests", "SearchBugs.Infrastructure.UnitTests\SearchBugs.Infrastructure.UnitTests.csproj", "{9A64B6F5-37EC-4938-BA12-0C69427FEB99}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3D5430A2-BE51-4430-AF63-83A418454CA6} = {3D5430A2-BE51-4430-AF63-83A418454CA6}
+		{91E839BC-EFCA-4057-9DE2-931533A4620C} = {91E839BC-EFCA-4057-9DE2-931533A4620C}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchBugs.Persistence.UnitTests", "SearchBugs.Persistence.UnitTests\SearchBugs.Persistence.UnitTests.csproj", "{214EDAB4-2261-49B2-A166-2DC93548C399}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SearchBugs.Persistence.UnitTests", "SearchBugs.Persistence.UnitTests\SearchBugs.Persistence.UnitTests.csproj", "{214EDAB4-2261-49B2-A166-2DC93548C399}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7E917907-F9D9-48D1-8968-8AA8E88F13FD} = {7E917907-F9D9-48D1-8968-8AA8E88F13FD}
+		{91E839BC-EFCA-4057-9DE2-931533A4620C} = {91E839BC-EFCA-4057-9DE2-931533A4620C}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

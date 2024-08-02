@@ -12,4 +12,6 @@ public interface IUserRepository
     Task<Result<Role>> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken);
 
     Task<Result<User>> IsEmailUniqueAsync(Email email, CancellationToken cancellationToken);
+
+    Task<Result<User>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 }
