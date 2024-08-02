@@ -27,9 +27,12 @@ if (app.Environment.IsDevelopment())
 app.MapAuthenticationsEndpoints();
 app.MapBugsEndpoints();
 app.MapUserEndpoints();
+app.MapProjectsEndpoints();
+app.MapGitEndpoints();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
+
 //app.UseAuthorization();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.Run();

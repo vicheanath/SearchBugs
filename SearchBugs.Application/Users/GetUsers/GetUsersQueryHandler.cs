@@ -12,7 +12,7 @@ internal sealed class GetUsersQueryHandler : IQueryHandler<GetUsersQuery, List<G
         Result.Create(request)
             .Bind(async query => Result.Create(await GetUsersAsync()))
             .Map(users => users.ToList());
-    public async Task<IEnumerable<GetUsersResponse>?> GetUsersAsync() =>
+    private async Task<IEnumerable<GetUsersResponse>?> GetUsersAsync() =>
         await _sqlQueryExecutor.QueryAsync<GetUsersResponse>(@"
             SELECT 
                 u.id as Id,

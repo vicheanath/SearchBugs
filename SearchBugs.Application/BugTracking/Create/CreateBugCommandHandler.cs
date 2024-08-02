@@ -23,11 +23,16 @@ public class CreateBugCommandHandler : ICommandHandler<CreateBugCommand>
     {
         var bugStatus = BugStatus.FromName(request.Status);
         var bugPriority = BugPriority.FromName(request.Priority);
+        if (bugStatus is null)
+            return Result.Failure(BugValidationErrors.InvalidBugStatus);
+        if (bugPriority is null)
+            return Result.Failure(BugValidationErrors.InvalidBugPriority);
+
         var bug = Bug.Create(
             request.Title,
             request.Description,
-            bugStatus,
-            bugPriority,
+            bugStatus.Id,
+            bugPriority.Id,
             request.Severity,
             new ProjectId(request.ProjectId),
             new UserId(request.AssigneeId),
@@ -38,7 +43,7 @@ public class CreateBugCommandHandler : ICommandHandler<CreateBugCommand>
             return Result.Failure(bug.Error);
         }
 
-        _bugRepository.Add(bug.Value);
+        await _bugRepository.Add(bug.Value);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success();
     }
