@@ -8,3 +8,7 @@ export * from './UserDetailsPage';
 export * from './RepositoryDetailsPage';
 export * from './BugDetailsPage';
 export * from './NotificationsPage';
+export * from './LoginPage';
+export * from './RegisterPage';
+export * from './SettingPage';
+export * from './BugAddPage';

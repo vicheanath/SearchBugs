@@ -1,25 +1,36 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import {
+  BugAddPage,
   BugDetailsPage,
   BugsPage,
   DashboardPage,
+  LoginPage,
   NotificationsPage,
   ProjectDetailsPage,
   ProjectsPage,
+  RegisterPage,
   RepositoriesPage,
   RepositoryDetailsPage,
+  SettingPage,
   UserDetailsPage,
   UsersPage,
 } from "./pages";
-import Layout from "./layouts/Main";
+import MainLayout from "./layouts/Main";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Layout />,
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
+  },
+  {
+    element: <MainLayout />,
     children: [
       {
-        path: "/dashboard",
+        path: "/",
         element: <DashboardPage />,
       },
       {
@@ -50,6 +61,10 @@ const router = createBrowserRouter([
         path: "/bugs",
         element: <BugsPage />,
       },
+      {
+        path: "/add-bug",
+        element: <BugAddPage />,
+      },
 
       {
         path: "/bugs/:bugId",
@@ -59,13 +74,16 @@ const router = createBrowserRouter([
         path: "/notifications",
         element: <NotificationsPage />,
       },
+      {
+        path: "/settings",
+        element: <SettingPage />,
+      }
     ],
   },
 ]);
 
 const Route = () => {
-  
   return <RouterProvider router={router} />;
-}
+};
 
 export default Route;
