@@ -8,7 +8,7 @@ namespace SearchBugs.Api.Endpoints;
 public static class UserEndpoints
 {
 
-    public record UpdateUserRequest(string Name);
+    public record UpdateUserRequest(string FirstName, string LastName);
 
     public static void MapUserEndpoints(this IEndpointRouteBuilder app)
     {
@@ -23,7 +23,7 @@ public static class UserEndpoints
         UpdateUserRequest request,
         ISender sender)
     {
-        var command = new UpdateUserCommand(id, request.Name);
+        var command = new UpdateUserCommand(id, request.FirstName, request.LastName);
         var result = await sender.Send(command);
         return Results.Ok(result);
     }

@@ -41,12 +41,12 @@ public class Bug : Entity<BugId>, IAuditable
     private readonly List<TimeTracking> _timeTracking = new();
 
 
-    private Bug(BugId id, string title, string description, BugStatus status, BugPriority priority, string severity, ProjectId projectId, UserId assigneeId, UserId reporterId, DateTime createdOnUtc) : base(id)
+    private Bug(BugId id, string title, string description, int statusId, int priorityId, string severity, ProjectId projectId, UserId assigneeId, UserId reporterId, DateTime createdOnUtc) : base(id)
     {
         Title = title;
         Description = description;
-        Status = status;
-        Priority = priority;
+        StatusId = statusId;
+        PriorityId = priorityId;
         Severity = severity;
         ProjectId = projectId;
         AssigneeId = assigneeId;
@@ -59,7 +59,7 @@ public class Bug : Entity<BugId>, IAuditable
 
     }
 
-    public static Result<Bug> Create(string title, string description, BugStatus status, BugPriority priority, string severity, ProjectId projectId, UserId assigneeId, UserId reporterId)
+    public static Result<Bug> Create(string title, string description, int status, int priority, string severity, ProjectId projectId, UserId assigneeId, UserId reporterId)
     {
         BugId bugId = new(Guid.NewGuid());
         return Result.Create(new Bug(bugId, title, description, status, priority, severity, projectId, assigneeId, reporterId, SystemTime.UtcNow));

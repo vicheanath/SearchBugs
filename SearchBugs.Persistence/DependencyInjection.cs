@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SearchBugs.Domain;
 using SearchBugs.Domain.Bugs;
+using SearchBugs.Domain.Projects;
+using SearchBugs.Domain.Repositories;
 using SearchBugs.Domain.Users;
 using SearchBugs.Persistence.Repositories;
 using Shared.Data;
@@ -33,6 +35,8 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
         services.AddScoped<IBugRepository, BugRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IProjectRepository, ProjectRepository>();
+        services.AddScoped<IGitRepository, GitRepository>();
 
         services.AddMemoryCache()
             .ConfigureOptions<ConnectionStringSetup>();

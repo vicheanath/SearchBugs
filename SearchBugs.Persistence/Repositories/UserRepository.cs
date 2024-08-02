@@ -11,6 +11,11 @@ internal sealed class UserRepository : Repository<User, UserId>, IUserRepository
     {
     }
 
+    public Task<Result<User>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<Result<Role>> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken) =>
           Result.Create(await DbContext.Set<Role>().FirstOrDefaultAsync(role => role.Id == roleId, cancellationToken));
 

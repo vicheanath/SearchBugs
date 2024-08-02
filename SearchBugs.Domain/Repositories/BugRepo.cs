@@ -2,24 +2,24 @@
 
 namespace SearchBugs.Domain.Repositories;
 
-public class BugRepository
+public class BugRepo
 {
     public BugId BugId { get; set; }
     public RepositoryId RepositoryId { get; set; }
 
-    private BugRepository()
+    private BugRepo()
     {
     }
 
-    private BugRepository(BugId bugId, RepositoryId repositoryId)
+    private BugRepo(BugId bugId, RepositoryId repositoryId)
     {
         BugId = bugId;
         RepositoryId = repositoryId;
     }
 
-    public static BugRepository Create(BugId bugId, RepositoryId repositoryId)
+    public static BugRepo Create(BugId bugId, RepositoryId repositoryId)
     {
-        return new BugRepository(bugId, repositoryId);
+        return new BugRepo(bugId, repositoryId);
     }
 
 }
