@@ -12,3 +12,4 @@ export * from './LoginPage';
 export * from './RegisterPage';
 export * from './SettingPage';
 export * from './BugAddPage';
+export * from './CreateProjectPage';

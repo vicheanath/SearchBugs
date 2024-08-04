@@ -3,10 +3,7 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -28,12 +25,20 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { useQuery } from "react-query";
-import { Bug } from "src/models/Bug";
 import { useNavigate } from "react-router-dom";
+import { useApi } from "@/hooks/useApi";
+
+interface Bug{
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  reporter: string;
+  assignee: string;
+}
 
 export const BugsPage = () => {
-  const { data, isLoading } = useQuery("bugs");
+  const { data } = useApi<Bug>("bugs");
   const navigate = useNavigate();
   return (
     <main className="flex flex-col p-4 gap-3 sm:px-6 sm:py-0 md:gap-8">
@@ -88,8 +93,8 @@ export const BugsPage = () => {
               {data?.value?.map((project: Bug) => (
                 <TableRow key={project.id}>
                   <TableCell>{project.title}</TableCell>
-                  <TableCell>{project.description}</TableCell>
-                  <TableCell className="hidden md:table-cell">
+                  <TableCell className="hidden md:table-cell">{project.description}</TableCell>
+                  <TableCell >
                     {project.status}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
@@ -123,9 +128,9 @@ export const BugsPage = () => {
           </Table>
         </CardContent>
         <CardFooter>
-          <div className="text-xs text-muted-foreground">
-            Showing <strong>1-10</strong> of <strong>32</strong> products
-          </div>
+          <span className="text-sm text-gray-500">
+            {data?.value?.length} bugs
+          </span>
         </CardFooter>
       </Card>
     </main>

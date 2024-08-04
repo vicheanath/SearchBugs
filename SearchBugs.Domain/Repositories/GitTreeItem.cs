@@ -4,33 +4,27 @@ namespace SearchBugs.Domain.Repositories;
 
 public class GitTreeItem : ValueObject
 {
-    public string Name { get; set; }
-    public string Path { get; set; }
-    public bool IsDirectory { get; set; }
-    public List<GitTreeItem> Children { get; set; } = new List<GitTreeItem>();
+    public string Id { get; set; }
+    public string Url { get; set; }
+    public DateTime Date { get; set; }
+    public string ShortMessageHtmlLink { get; set; }
 
     protected override IEnumerable<object> GetAtomicValues()
     {
-        yield return Name;
-        yield return Path;
-        yield return IsDirectory;
-        yield return Children;
+        yield return Id;
+        yield return Url;
+        yield return Date;
+        yield return ShortMessageHtmlLink;
     }
 
-    private GitTreeItem(string name, string path, bool isDirectory)
+    private GitTreeItem(string id, string url, DateTime date, string shortMessageHtmlLink)
     {
-        Name = name;
-        Path = path;
-        IsDirectory = isDirectory;
+        Id = id;
+        Url = url;
+        Date = date;
+        ShortMessageHtmlLink = shortMessageHtmlLink;
     }
 
-    public static GitTreeItem Create(string name, string path, bool isDirectory)
-    {
-        return new GitTreeItem(name, path, isDirectory);
-    }
-
-    public void AddChild(GitTreeItem child)
-    {
-        Children.Add(child);
-    }
+    public static GitTreeItem Create(string id, string url, DateTime date, string shortMessageHtmlLink) =>
+        new GitTreeItem(id, url, date, shortMessageHtmlLink);
 }
