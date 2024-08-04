@@ -19,8 +19,4 @@
 			<_Parameter1>SearchBugs.Application.UnitTests</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Git\GetRepositoryTree\" />
-	  <Folder Include="Git\CloneRepository\" />
-	</ItemGroup>
 </Project>

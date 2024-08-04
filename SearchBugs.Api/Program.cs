@@ -1,4 +1,3 @@
-
 using SearchBugs.Api.Endpoints;
 using SearchBugs.Api.Middleware;
 using SearchBugs.Application;
@@ -28,7 +27,7 @@ app.MapAuthenticationsEndpoints();
 app.MapBugsEndpoints();
 app.MapUserEndpoints();
 app.MapProjectsEndpoints();
-app.MapGitEndpoints();
+app.MapRepoEndpoints();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

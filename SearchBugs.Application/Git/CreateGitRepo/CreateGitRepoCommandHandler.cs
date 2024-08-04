@@ -28,7 +28,7 @@ public sealed class CreateGitRepoCommandHandler : ICommandHandler<CreateGitRepoC
 
         if (project.IsFailure)
             return Result.Failure(project.Error);
-        _gitRepoService.CreateRepository(repo.Name);
+        //_gitRepoService.CreateRepository(repo.Name);
         await _gitRepository.Add(repo);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success();

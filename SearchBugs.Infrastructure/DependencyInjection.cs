@@ -22,7 +22,7 @@ public static class DependencyInjection
         //{
         //    options.WaitForJobsToComplete = true;
         //});
-
+        services.AddHttpContextAccessor();
         services.ConfigureOptions<LoggingBackgroundJobSetup>();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -34,6 +34,7 @@ public static class DependencyInjection
         services.AddScoped<IPasswordHashingService, PasswordHashingService>();
         services.AddScoped<IDataEncryptionService, DataEncryptionService>();
         services.AddScoped<IGitService, GitService>();
+        services.AddScoped<IGitRepositoryService, GitRepositoryService>();
 
         services.AddCors(options =>
         {

@@ -3,6 +3,7 @@ import {
   BugAddPage,
   BugDetailsPage,
   BugsPage,
+  CreateProjectPage,
   DashboardPage,
   LoginPage,
   NotificationsPage,
@@ -38,9 +39,14 @@ const router = createBrowserRouter([
         element: <ProjectsPage />,
       },
       {
+        path: "/projects/create",
+        element: <CreateProjectPage />,
+      },
+      {
         path: "/projects/:projectId",
         element: <ProjectDetailsPage />,
       },
+      
       {
         path: "/users",
         element: <UsersPage />,
@@ -54,7 +60,7 @@ const router = createBrowserRouter([
         element: <RepositoriesPage />,
       },
       {
-        path: "/repositories/:repoId",
+        path: "/repositories/:url",
         element: <RepositoryDetailsPage />,
       },
       {

@@ -1,171 +1,106 @@
-﻿using LibGit2Sharp;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using SearchBugs.Domain.Repositories;
 using SearchBugs.Infrastructure.Options;
+using System.Buffers;
+using System.Diagnostics;
+using System.IO.Pipelines;
+using System.Text;
 namespace SearchBugs.Infrastructure.Services;
 
 internal class GitService : IGitService
 {
     private readonly GitOptions _gitOptions;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private HttpContext _httpContext => _httpContextAccessor.HttpContext!;
 
-    public GitService(IOptions<GitOptions> gitOptions)
+    public GitService(IOptions<GitOptions> gitOptions, IHttpContextAccessor httpContextAccessor)
     {
         _gitOptions = gitOptions.Value;
+        _httpContextAccessor = httpContextAccessor;
     }
 
-    public MemoryStream GetInfoRefs(string repoName)
+    public async Task Handle(string repositoryName, CancellationToken cancellationToken = default)
     {
-        string repoPath = Path.Combine(_gitOptions.BasePath, repoName);
-        using var repo = new LibGit2Sharp.Repository(repoPath);
+        var gitPath = Path.Combine(_gitOptions.BasePath, repositoryName);
 
-        var references = repo.Refs;
-        var memoryStream = new MemoryStream();
-        var writer = new StreamWriter(memoryStream);
-        foreach (var reference in references)
+        using var process = new Process();
+        process.StartInfo = new ProcessStartInfo
         {
-            writer.Write($"{reference.TargetIdentifier} {reference.CanonicalName}\n");
-        }
-        writer.Flush();
-        memoryStream.Position = 0;
-        return memoryStream;
-    }
-
-    public void ReceivePack(string repoName, Stream stream)
-    {
-        string repoPath = Path.Combine(_gitOptions.BasePath, repoName);
-        using var repo = new LibGit2Sharp.Repository(repoPath);
-        string branchName = repo.Head.FriendlyName;
-        Signature auth = new Signature("username", "email", DateTimeOffset.Now);
-        Signature committer = new Signature("username", "email", DateTimeOffset.Now);
-
-        string newCommitSha = "new_commit_sha"; // Replace with actual commit SHA from the pack file
-
-        var branch = repo.Branches[branchName];
-        if (branch != null)
-        {
-            var newCommit = repo.Lookup<Commit>(newCommitSha);
-            repo.Refs.UpdateTarget(repo.Refs[branch.CanonicalName], newCommit.Sha);
-        }
-    }
-
-    public MemoryStream UploadPack(string repoName, Stream stream)
-    {
-        var repoPath = Path.Combine(_gitOptions.BasePath, repoName);
-        using var repo = new LibGit2Sharp.Repository(repoPath);
-        var commits = repo.Commits.ToList();
-        var memoryStream = new MemoryStream();
-        using var writer = new StreamWriter(stream);
-
-        foreach (var commit in commits)
-        {
-            writer.WriteLine(commit.Sha); // Write commit SHA
-        }
-        writer.Flush();
-
-        return new MemoryStream();
-    }
-
-
-    public void CloneRepository(string repoUrl, string repoName)
-    {
-        string repoPath = Path.Combine(_gitOptions.BasePath, repoName);
-        LibGit2Sharp.Repository.Clone(repoUrl, repoPath);
-    }
-
-    public void Fetch(string repoName, string username, string password)
-    {
-        string repoPath = Path.Combine(_gitOptions.BasePath, repoName);
-        using (var repo = new LibGit2Sharp.Repository(repoPath))
-        {
-            var remote = repo.Network.Remotes["origin"];
-            var options = new FetchOptions
+            FileName = "git",
+            Arguments = "http-backend --stateless-rpc --advertise-refs",
+            RedirectStandardInput = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            WorkingDirectory = gitPath,
+            EnvironmentVariables =
             {
-                CredentialsProvider = (url, usernameFromUrl, types) =>
-                    new UsernamePasswordCredentials { Username = username, Password = password }
-            };
-            Commands.Fetch(repo, remote.Name, remote.FetchRefSpecs.Select(x => x.Specification), options, null);
+                { "GIT_HTTP_EXPORT_ALL", "1" },
+                { "HTTP_GIT_PROTOCOL", _httpContext.Request.Headers["Git-Protocol"] },
+                { "REQUEST_METHOD", _httpContext.Request.Method },
+                { "GIT_PROJECT_ROOT", gitPath },
+                { "PATH_INFO", $"/{_httpContext.Request.RouteValues["path"]}" },
+                { "QUERY_STRING", _httpContext.Request.QueryString.ToUriComponent().TrimStart('?') },
+                { "CONTENT_TYPE", _httpContext.Request.ContentType },
+                { "CONTENT_LENGTH", _httpContext.Request.ContentLength?.ToString() },
+                { "HTTP_CONTENT_ENCODING", _httpContext.Request.Headers.ContentEncoding },
+                { "REMOTE_USER", _httpContext.User.Identity?.Name },
+                { "REMOTE_ADDR", _httpContext.Connection.RemoteIpAddress?.ToString() },
+                { "GIT_COMMITTER_NAME", _httpContext.User.Identity?.Name },
+                { "GIT_COMMITTER_EMAIL", "TODO: some email" },
+            },
+        };
+        process.Start();
+
+        var pipeWriter = PipeWriter.Create(process.StandardInput.BaseStream);
+        await _httpContext.Request.BodyReader.CopyToAsync(pipeWriter, cancellationToken);
+
+        var pipeReader = PipeReader.Create(process.StandardOutput.BaseStream);
+        await ReadResponse(pipeReader, cancellationToken);
+
+        await pipeReader.CopyToAsync(_httpContext.Response.BodyWriter, cancellationToken);
+        await pipeReader.CompleteAsync();
+    }
+
+    private async Task ReadResponse(PipeReader pipeReader, CancellationToken cancellationToken)
+    {
+        while (true)
+        {
+            var result = await pipeReader.ReadAsync(cancellationToken);
+            var buffer = result.Buffer;
+            var (position, isFinished) = ReadHeaders(_httpContext, buffer);
+            pipeReader.AdvanceTo(position, buffer.End);
+
+            if (result.IsCompleted || isFinished)
+                break;
         }
     }
 
-    public void Push(string repoName, string username, string password)
+    private static (SequencePosition Position, bool IsFinished) ReadHeaders(
+        HttpContext httpContext,
+        in ReadOnlySequence<byte> sequence)
     {
-        string repoPath = Path.Combine(_gitOptions.BasePath, repoName);
-        using (var repo = new LibGit2Sharp.Repository(repoPath))
+        var reader = new SequenceReader<byte>(sequence);
+        while (!reader.End)
         {
-            var remote = repo.Network.Remotes["origin"];
-            var options = new PushOptions
-            {
-                CredentialsProvider = (url, usernameFromUrl, types) =>
-                    new UsernamePasswordCredentials { Username = username, Password = password }
-            };
-            repo.Network.Push(remote, @"refs/heads/master", options);
-        }
-    }
+            if (!reader.TryReadTo(out ReadOnlySpan<byte> line, (byte)'\n'))
+                break;
 
-    public GitTreeItem GetRepositoryTree(string repoName)
-    {
-        string repoPath = Path.Combine(_gitOptions.BasePath, repoName);
-        using (var repo = new LibGit2Sharp.Repository(repoPath))
-        {
-            var rootTree = repo.Head.Tip.Tree;
-            var rootItem = GitTreeItem.Create(
-                repo.Info.WorkingDirectory,
-                repo.Info.WorkingDirectory,
-                true
-            );
+            if (line.Length == 1)
+                return (reader.Position, true);
 
-            PopulateTree(rootTree, rootItem, repo.Info.WorkingDirectory);
-            return rootItem;
-        }
-    }
+            var colon = line.IndexOf((byte)':');
+            if (colon == -1)
+                break;
 
-    private void PopulateTree(Tree tree, GitTreeItem parentItem, string parentPath)
-    {
-        foreach (var entry in tree)
-        {
-            var itemPath = Path.Combine(parentPath, entry.Path);
-            if (entry.TargetType == TreeEntryTargetType.Tree)
-            {
-                var treeItem = GitTreeItem.Create(entry.Name, itemPath, true);
-                parentItem.AddChild(treeItem);
-                PopulateTree((Tree)entry.Target, treeItem, itemPath);
-            }
-            else
-            {
-                parentItem.AddChild(GitTreeItem.Create(entry.Name, itemPath, false));
-            }
+            var headerName = Encoding.UTF8.GetString(line[..colon]);
+            var headerValue = Encoding.UTF8.GetString(line[(colon + 1)..]).Trim();
+            httpContext.Response.Headers[headerName] = headerValue;
         }
-    }
 
-    public void DeleteRepository(string repoName)
-    {
-        string repoPath = Path.Combine(_gitOptions.BasePath, repoName);
-        if (Directory.Exists(repoPath))
-        {
-            Directory.Delete(repoPath, true);
-        }
-        else
-        {
-            throw new DirectoryNotFoundException($"Repository '{repoName}' not found.");
-        }
-    }
-
-    public void CreateRepository(string repoName)
-    {
-        try
-        {
-            string repoPath = Path.Combine(_gitOptions.BasePath, repoName);
-            if (Directory.Exists(repoPath))
-            {
-                throw new InvalidOperationException($"Repository '{repoName}' already exists.");
-            }
-
-            LibGit2Sharp.Repository.Init(repoPath);
-        }
-        catch (Exception ex)
-        {
-            throw new InvalidOperationException($"Failed to create repository '{repoName}'.", ex);
-        }
+        return (reader.Position, false);
     }
 }
 

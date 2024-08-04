@@ -1,143 +1,45 @@
-Certainly! Below is a list of endpoints grouped by their respective domains for the software bug tracking system:
+<a href="#">
+<p align="center">
+<img height=100 src="logo.png"/>
+</p>
+</a>
+<p align="center">
+  <strong>Comprehensive Bug Tracking and Project Management System 🚀</strong>
+</p>
 
-### User Management Domain
+---
 
-**Endpoints:**
-1. **Create User:**
-   - `POST /api/users`
-2. **Get User Details:**
-   - `GET /api/users/{user_id}`
-3. **Update User:**
-   - `PUT /api/users/{user_id}`
-4. **Delete User:**
-   - `DELETE /api/users/{user_id}`
-5. **Authenticate User:**
-   - `POST /api/auth/login`
-6. **Logout User:**
-   - `POST /api/auth/logout`
-7. **Get All Users:**
-   - `GET /api/users`
+# SearchsBugs
 
-### Project Management Domain
+Streamline your development process with our powerful bug tracking and project management system. Designed with Domain-Driven Design (DDD) principles and built on .NET Core, SearchsBugs integrates robust user management, efficient bug tracking, seamless notification systems, repository management, and comprehensive project management to enhance your team's productivity and collaboration.
 
-**Endpoints:**
-1. **Create Project:**
-   - `POST /api/projects`
-2. **Get Project Details:**
-   - `GET /api/projects/{project_id}`
-3. **Update Project:**
-   - `PUT /api/projects/{project_id}`
-4. **Delete Project:**
-   - `DELETE /api/projects/{project_id}`
-5. **Get All Projects:**
-   - `GET /api/projects`
+| Feature             | Description                                                                                  | Progress |
+| ------------------- | -------------------------------------------------------------------------------------------- | -------- |
+| User Management     | Provides a comprehensive system for managing user roles, permissions, and authentication.     | :white_check_mark: |
+| Bugs Tracking       | Efficiently track, manage, and resolve bugs throughout the project lifecycle.                 | :white_check_mark: |
+| Notification        | Implements a notification system to keep team members informed of important updates.          | :white_check_mark: |
+| Repo Management     | Manage repositories, track changes, and collaborate on code with ease.                        | :white_check_mark: |
+| Project Management  | Comprehensive tools for planning, executing, and monitoring project progress.                 | :white_check_mark: |
+| Scalability         | Designed to scale and handle increasing loads as your team and projects grow.                 | :white_check_mark: |
+| Security Measures   | Implements robust security measures to protect data and ensure privacy.                       | :white_check_mark: |
+| Documentation       | Provides thorough documentation to help developers understand and use the system effectively. | :white_check_mark: |
 
-### Bug Tracking Domain
+## Reviewers
 
-**Endpoints:**
-1. **Create Bug:**
-   - `POST /api/bugs`
-2. **Get Bug Details:**
-   - `GET /api/bugs/{bug_id}`
-3. **Update Bug:**
-   - `PUT /api/bugs/{bug_id}`
-4. **Delete Bug:**
-   - `DELETE /api/bugs/{bug_id}`
-5. **Get All Bugs:**
-   - `GET /api/bugs`
-6. **Add Comment to Bug:**
-   - `POST /api/bugs/{bug_id}/comments`
-7. **Get Bug Comments:**
-   - `GET /api/bugs/{bug_id}/comments`
-8. **Add Attachment to Bug:**
-   - `POST /api/bugs/{bug_id}/attachments`
-9. **Get Bug Attachments:**
-   - `GET /api/bugs/{bug_id}/attachments`
-10. **Get Bug History:**
-    - `GET /api/bugs/{bug_id}/history`
-11. **Track Time for Bug:**
-    - `POST /api/bugs/{bug_id}/time-tracking`
-12. **Get Bug Time Tracking:**
-    - `GET /api/bugs/{bug_id}/time-tracking`
-13. **Add Custom Field to Bug:**
-    - `POST /api/bugs/{bug_id}/custom-fields`
-14. **Get Bug Custom Fields:**
-    - `GET /api/bugs/{bug_id}/custom-fields`
+Contributors helping to review/merge pull requests:
 
-### Notification Domain
+- [@vicheanath](https://github.com/vicheanath)
 
-**Endpoints:**
-1. **Get User Notifications:**
-   - `GET /api/users/{user_id}/notifications`
-2. **Mark Notification as Read:**
-   - `PUT /api/notifications/{notification_id}/read`
-3. **Delete Notification:**
-   - `DELETE /api/notifications/{notification_id}`
+## Code of Conduct
 
-### Repository Management Domain
+Please read [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for details on our code of conduct.
 
-**Endpoints:**
-1. **Create Repository:**
-   - `POST /api/repositories`
-2. **Get Repository Details:**
-   - `GET /api/repositories/{repo_id}`
-3. **Update Repository:**
-   - `PUT /api/repositories/{repo_id}`
-4. **Delete Repository:**
-   - `DELETE /api/repositories/{repo_id}`
-5. **Get All Repositories:**
-   - `GET /api/repositories`
-6. **Link Bug to Repository:**
-   - `POST /api/bugs/{bug_id}/repositories`
-7. **Get Repositories for Bug:**
-   - `GET /api/bugs/{bug_id}/repositories`
+## How to run locally
 
-### Summary of Endpoints:
+Check <a href="CONTRIBUTING.md">here</a> on how to run locally</a>
 
-#### User Management Domain
-- `POST /api/users`
-- `GET /api/users/{user_id}`
-- `PUT /api/users/{user_id}`
-- `DELETE /api/users/{user_id}`
-- `POST /api/auth/login`
-- `POST /api/auth/logout`
-- `GET /api/users`
+## Why did you make this?
 
-#### Project Management Domain
-- `POST /api/projects`
-- `GET /api/projects/{project_id}`
-- `PUT /api/projects/{project_id}`
-- `DELETE /api/projects/{project_id}`
-- `GET /api/projects`
+## Attribution
 
-#### Bug Tracking Domain
-- `POST /api/bugs`
-- `GET /api/bugs/{bug_id}`
-- `PUT /api/bugs/{bug_id}`
-- `DELETE /api/bugs/{bug_id}`
-- `GET /api/bugs`
-- `POST /api/bugs/{bug_id}/comments`
-- `GET /api/bugs/{bug_id}/comments`
-- `POST /api/bugs/{bug_id}/attachments`
-- `GET /api/bugs/{bug_id}/attachments`
-- `GET /api/bugs/{bug_id}/history`
-- `POST /api/bugs/{bug_id}/time-tracking`
-- `GET /api/bugs/{bug_id}/time-tracking`
-- `POST /api/bugs/{bug_id}/custom-fields`
-- `GET /api/bugs/{bug_id}/custom-fields`
-
-#### Notification Domain
-- `GET /api/users/{user_id}/notifications`
-- `PUT /api/notifications/{notification_id}/read`
-- `DELETE /api/notifications/{notification_id}`
-
-#### Repository Management Domain
-- `POST /api/repositories`
-- `GET /api/repositories/{repo_id}`
-- `PUT /api/repositories/{repo_id}`
-- `DELETE /api/repositories/{repo_id}`
-- `GET /api/repositories`
-- `POST /api/bugs/{bug_id}/repositories`
-- `GET /api/bugs/{bug_id}/repositories`
-
-These endpoints cover CRUD operations and specific actions required to manage users, projects, bugs, notifications, and repositories in the bug tracking system.
+For repository management and bug tracking, we drew inspiration from various open-source projects to deliver a robust and reliable solution.
