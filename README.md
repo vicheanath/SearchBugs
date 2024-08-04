@@ -15,14 +15,14 @@ Streamline your development process with our powerful bug tracking and project m
 
 | Feature             | Description                                                                                  | Progress |
 | ------------------- | -------------------------------------------------------------------------------------------- | -------- |
-| User Management     | Provides a comprehensive system for managing user roles, permissions, and authentication.     | :white_check_mark: |
-| Bugs Tracking       | Efficiently track, manage, and resolve bugs throughout the project lifecycle.                 | :white_check_mark: |
-| Notification        | Implements a notification system to keep team members informed of important updates.          | :white_check_mark: |
-| Repo Management     | Manage repositories, track changes, and collaborate on code with ease.                        | :white_check_mark: |
-| Project Management  | Comprehensive tools for planning, executing, and monitoring project progress.                 | :white_check_mark: |
-| Scalability         | Designed to scale and handle increasing loads as your team and projects grow.                 | :white_check_mark: |
-| Security Measures   | Implements robust security measures to protect data and ensure privacy.                       | :white_check_mark: |
-| Documentation       | Provides thorough documentation to help developers understand and use the system effectively. | :white_check_mark: |
+| User Management     | Provides a comprehensive system for managing user roles, permissions, and authentication.     | Progess|
+| Bugs Tracking       | Efficiently track, manage, and resolve bugs throughout the project lifecycle.                 | Todo |
+| Notification        | Implements a notification system to keep team members informed of important updates.          | Todo |
+| Repo Management     | Manage repositories, track changes, and collaborate on code with ease.                        | Progess |
+| Project Management  | Comprehensive tools for planning, executing, and monitoring project progress.                 | Progess |
+| Scalability         | Designed to scale and handle increasing loads as your team and projects grow.                 | Todo |
+| Security Measures   | Implements robust security measures to protect data and ensure privacy.                       | Todo |
+| Documentation       | Provides thorough documentation to help developers understand and use the system effectively. | Todo |
 
 ## Reviewers
 
