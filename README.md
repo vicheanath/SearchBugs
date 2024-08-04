@@ -1,8 +1,8 @@
-<a href="#">
 <p align="center">
-<img height=100 src="logo.png"/>
+  
+<img src="https://github.com/user-attachments/assets/e63a5401-022a-4ac6-b327-2abeffabcbd2">
+
 </p>
-</a>
 <p align="center">
   <strong>Comprehensive Bug Tracking and Project Management System 🚀</strong>
 </p>
