@@ -19,4 +19,7 @@ internal static class AuthValidationErrors
 
     internal static Error UserNotFound => new("User.UserNotFound", "The user was not found.");
 
+    internal static Error FirstNameIsRequired => new("User.FirstNameIsRequired", "The user's first name is required.");
+    internal static Error LastNameIsRequired => new("User.LastNameIsRequired", "The user's last name is required.");
+
 }

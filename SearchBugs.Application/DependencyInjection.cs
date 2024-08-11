@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Behaviors;
 namespace SearchBugs.Application;
@@ -11,10 +10,9 @@ public static class DependencyInjection
         services.AddMediatR(config =>
         {
             config.RegisterServicesFromAssemblyContaining<ApplicationAssemblyReference>();
+
             config.AddOpenBehavior(typeof(ValidationPipelineBehavior<,>));
         });
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
-
 
         services.AddValidatorsFromAssembly(ApplicationAssemblyReference.Assembly);
 

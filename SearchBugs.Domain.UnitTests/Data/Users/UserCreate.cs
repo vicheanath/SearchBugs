@@ -9,11 +9,11 @@ internal sealed class UserCreate : TheoryData<User>
     {
         var faker = new Faker();
 
-        User userRegistration = User.Create(
+        var userRegistration = User.Create(
             Name.Create(faker.Name.FirstName(), faker.Name.LastName()),
             Email.Create(faker.Internet.Email()),
             faker.Internet.Password());
 
-        Add(userRegistration);
+        Add(userRegistration.Value);
     }
 }
