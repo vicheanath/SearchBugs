@@ -30,7 +30,7 @@ public abstract class ValueObject : IEquatable<ValueObject>
 
     /// <inheritdoc />
     public override int GetHashCode() =>
-        GetAtomicValues().Aggregate(default(int), (hashcode, value) => HashCode.Combine(hashcode, value.GetHashCode()));
+        GetAtomicValues().Aggregate(default(int), (hashCode, value) => HashCode.Combine(hashCode, value.GetHashCode()));
 
     /// <summary>
     /// Gets the atomic values of the value object.

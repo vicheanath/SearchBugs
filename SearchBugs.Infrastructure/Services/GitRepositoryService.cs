@@ -89,4 +89,9 @@ internal sealed class GitRepositoryService : IGitRepositoryService
             }
         }
     }
+
+    GitTreeItem IGitRepositoryService.GetRepositoryTree(string repoName)
+    {
+        throw new NotImplementedException();
+    }
 }

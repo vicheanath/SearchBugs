@@ -22,8 +22,8 @@ internal class CreateBug : TheoryData<Bug>
                 Result<Bug> bug = Bug.Create(
                     faker.Lorem.Sentence(),
                     faker.Lorem.Paragraph(),
-                    item,
-                    item2,
+                    item.Id,
+                    item2.Id,
                     faker.Lorem.Sentence(),
                     new ProjectId(faker.Random.Guid()),
                     new UserId(faker.Random.Guid()),
