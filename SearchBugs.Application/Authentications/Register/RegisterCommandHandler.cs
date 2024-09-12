@@ -27,6 +27,11 @@ internal sealed class RegisterCommandHandler : ICommandHandler<RegisterCommand>
                 Name.Create(request.FirstName, request.LastName),
                 Email.Create(request.Email),
                 passwordHashingService.HashPassword(request.Password));
+        var emailIsUnique = await CheckIfEmailIsUniqueAsync(user.Value.Email, cancellationToken);
+        if (!emailIsUnique.IsSuccess)
+        {
+            return Result.Failure(AuthValidationErrors.EmailAlreadyExists);
+        }
 
         var role = await _userRepository.GetRoleByIdAsync(Role.Guest.Id, cancellationToken);
         user.Value.AddRole(role.Value);
@@ -36,6 +41,6 @@ internal sealed class RegisterCommandHandler : ICommandHandler<RegisterCommand>
 
     }
 
-    private async Task<Result<User>> CheckIfEmailIsUniqueAsync(User user, CancellationToken cancellationToken) =>
-                await _userRepository.IsEmailUniqueAsync(user.Email, cancellationToken);
+    private async Task<Result<User>> CheckIfEmailIsUniqueAsync(Email email, CancellationToken cancellationToken) =>
+                await _userRepository.IsEmailUniqueAsync(email, cancellationToken);
 }
