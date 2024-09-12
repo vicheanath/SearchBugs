@@ -1,8 +1,9 @@
 <p align="center">
   
 <img src="https://github.com/user-attachments/assets/e63a5401-022a-4ac6-b327-2abeffabcbd2">
-
 </p>
+
+[![.NET](https://github.com/vicheanath/SearchBugs/actions/workflows/dotnet.yml/badge.svg)](https://github.com/vicheanath/SearchBugs/actions/workflows/dotnet.yml)
 <p align="center">
   <strong>Comprehensive Bug Tracking and Project Management System 🚀</strong>
 </p>
