@@ -11,4 +11,6 @@ public static class GitErrors
     public static Error BranchNotFound = new Error("Git.BranchNotFound", "Branch not found.");
 
     public static Error CommitNotFound = new Error("Git.CommitNotFound", "Commit not found.");
+
+    public static Error RepositoryNotFound = new Error("Git.RepositoryNotFound", "Repository not found.");
 }
