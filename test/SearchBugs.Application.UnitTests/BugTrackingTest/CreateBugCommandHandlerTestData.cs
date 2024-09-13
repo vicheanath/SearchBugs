@@ -14,9 +14,9 @@ internal class CreateBugCommandHandlerTestData : TheoryData<CreateBugCommand>
            faker.Lorem.Paragraph(),
            faker.PickRandom(status),
            faker.PickRandom(priority),
-            faker.PickRandom(BugSeverity.GetValues().Select(x => x.Name).ToArray()),
+           faker.PickRandom(BugSeverity.GetValues().Select(x => x.Name).ToArray()),
            faker.Random.Guid(),
-            faker.Random.Guid(),
+           faker.Random.Guid(),
            faker.Random.Guid()));
     }
 
@@ -29,9 +29,9 @@ internal class CreateBugCommandHandlerTestData : TheoryData<CreateBugCommand>
            faker.Lorem.Paragraph(),
            faker.PickRandom(status),
            faker.PickRandom(priority),
-            faker.PickRandom(BugSeverity.GetValues().Select(x => x.Name).ToArray()),
+           faker.PickRandom(BugSeverity.GetValues().Select(x => x.Name).ToArray()),
            faker.Random.Guid(),
-            faker.Random.Guid(),
+           faker.Random.Guid(),
            faker.Random.Guid()) };
     }
 
@@ -44,9 +44,9 @@ internal class CreateBugCommandHandlerTestData : TheoryData<CreateBugCommand>
            faker.Lorem.Paragraph(),
            faker.PickRandom(status),
            faker.PickRandom(priority),
-            faker.PickRandom(BugSeverity.GetValues().Select(x => x.Name).ToArray()),
+           faker.PickRandom(BugSeverity.GetValues().Select(x => x.Name).ToArray()),
            faker.Random.Guid(),
-            faker.Random.Guid(),
+           faker.Random.Guid(),
            faker.Random.Guid()) };
     }
 
@@ -61,7 +61,7 @@ internal class CreateBugCommandHandlerTestData : TheoryData<CreateBugCommand>
            faker.PickRandom(priority),
             "Invalid",
            faker.Random.Guid(),
-            faker.Random.Guid(),
+           faker.Random.Guid(),
            faker.Random.Guid()) };
     }
 
@@ -74,9 +74,9 @@ internal class CreateBugCommandHandlerTestData : TheoryData<CreateBugCommand>
            faker.Lorem.Paragraph(),
            faker.PickRandom(status),
            faker.PickRandom(priority),
-            faker.PickRandom(BugSeverity.GetValues().Select(x => x.Name).ToArray()),
+           faker.PickRandom(BugSeverity.GetValues().Select(x => x.Name).ToArray()),
            Guid.Empty,
-            faker.Random.Guid(),
+           faker.Random.Guid(),
            faker.Random.Guid()) };
     }
 
@@ -89,9 +89,9 @@ internal class CreateBugCommandHandlerTestData : TheoryData<CreateBugCommand>
            faker.Lorem.Paragraph(),
            faker.PickRandom(status),
            faker.PickRandom(priority),
-            faker.PickRandom(BugSeverity.GetValues().Select(x => x.Name).ToArray()),
+           faker.PickRandom(BugSeverity.GetValues().Select(x => x.Name).ToArray()),
            faker.Random.Guid(),
-            Guid.Empty,
+           Guid.Empty,
            faker.Random.Guid()) };
     }
 
@@ -104,9 +104,9 @@ internal class CreateBugCommandHandlerTestData : TheoryData<CreateBugCommand>
            faker.Lorem.Paragraph(),
            faker.PickRandom(status),
            faker.PickRandom(priority),
-            faker.PickRandom(BugSeverity.GetValues().Select(x => x.Name).ToArray()),
+           faker.PickRandom(BugSeverity.GetValues().Select(x => x.Name).ToArray()),
            faker.Random.Guid(),
-            faker.Random.Guid(),
+           faker.Random.Guid(),
            Guid.Empty) };
     }
 }

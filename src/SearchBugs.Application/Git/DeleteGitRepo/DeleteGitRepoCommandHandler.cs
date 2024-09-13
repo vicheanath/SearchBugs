@@ -1,5 +1,5 @@
 ﻿using SearchBugs.Domain;
-using SearchBugs.Domain.Repositories;
+using SearchBugs.Domain.Git;
 using Shared.Messaging;
 using Shared.Results;
 

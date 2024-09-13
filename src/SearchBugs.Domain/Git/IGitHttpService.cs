@@ -1,6 +1,6 @@
-﻿namespace SearchBugs.Domain.Repositories;
+﻿namespace SearchBugs.Domain.Git;
 
-public interface IGitService
+public interface IGitHttpService
 {
     Task Handle(string repositoryName, CancellationToken cancellationToken = default);
 }

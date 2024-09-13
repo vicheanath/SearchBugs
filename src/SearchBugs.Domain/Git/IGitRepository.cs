@@ -1,6 +1,7 @@
-﻿using Shared.Results;
+﻿using SearchBugs.Domain.Repositories;
+using Shared.Results;
 
-namespace SearchBugs.Domain.Repositories;
+namespace SearchBugs.Domain.Git;
 
 public interface IGitRepository : IRepository<Repository, RepositoryId>
 {
