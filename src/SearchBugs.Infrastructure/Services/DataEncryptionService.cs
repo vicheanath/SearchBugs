@@ -8,6 +8,14 @@ internal sealed class DataEncryptionService : IDataEncryptionService
 {
     public string Encrypt(string plainText, string key)
     {
+        if (string.IsNullOrEmpty(plainText))
+        {
+            throw new ArgumentNullException(nameof(plainText));
+        }
+        if (string.IsNullOrEmpty(key))
+        {
+            throw new ArgumentNullException(nameof(key));
+        }
         using (Aes aes = Aes.Create())
         {
             aes.Key = Encoding.UTF8.GetBytes(key);
@@ -31,6 +39,15 @@ internal sealed class DataEncryptionService : IDataEncryptionService
 
     public string Decrypt(string cipherText, string key)
     {
+        if (string.IsNullOrEmpty(cipherText))
+        {
+            throw new ArgumentNullException(nameof(cipherText));
+        }
+
+        if (string.IsNullOrEmpty(key))
+        {
+            throw new ArgumentNullException(nameof(key));
+        }
         using (Aes aes = Aes.Create())
         {
             aes.Key = Encoding.UTF8.GetBytes(key);

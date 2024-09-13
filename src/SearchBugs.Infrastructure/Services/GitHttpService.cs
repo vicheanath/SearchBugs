@@ -22,20 +22,22 @@ internal class GitHttpService : IGitHttpService
 
     public async Task Handle(string repositoryName, CancellationToken cancellationToken = default)
     {
-        var gitPath = Path.Combine(_gitOptions.BasePath, repositoryName);
-
-        using var process = new Process();
-        process.StartInfo = new ProcessStartInfo
+        try
         {
-            FileName = "git",
-            Arguments = "http-backend --stateless-rpc --advertise-refs",
-            RedirectStandardInput = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-            WorkingDirectory = gitPath,
-            EnvironmentVariables =
+            var gitPath = Path.Combine(_gitOptions.BasePath, repositoryName);
+
+            using var process = new Process();
+            process.StartInfo = new ProcessStartInfo
+            {
+                FileName = "git",
+                Arguments = "http-backend --stateless-rpc --advertise-refs",
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = gitPath,
+                EnvironmentVariables =
             {
                 { "GIT_HTTP_EXPORT_ALL", "1" },
                 { "HTTP_GIT_PROTOCOL", _httpContext.Request.Headers["Git-Protocol"] },
@@ -51,17 +53,23 @@ internal class GitHttpService : IGitHttpService
                 { "GIT_COMMITTER_NAME", _httpContext.User.Identity?.Name },
                 { "GIT_COMMITTER_EMAIL", "TODO: some email" },
             },
-        };
-        process.Start();
+            };
+            process.Start();
 
-        var pipeWriter = PipeWriter.Create(process.StandardInput.BaseStream);
-        await _httpContext.Request.BodyReader.CopyToAsync(pipeWriter, cancellationToken);
+            var pipeWriter = PipeWriter.Create(process.StandardInput.BaseStream);
+            await _httpContext.Request.BodyReader.CopyToAsync(pipeWriter, cancellationToken);
 
-        var pipeReader = PipeReader.Create(process.StandardOutput.BaseStream);
-        await ReadResponse(pipeReader, cancellationToken);
+            var pipeReader = PipeReader.Create(process.StandardOutput.BaseStream);
+            await ReadResponse(pipeReader, cancellationToken);
 
-        await pipeReader.CopyToAsync(_httpContext.Response.BodyWriter, cancellationToken);
-        await pipeReader.CompleteAsync();
+            await pipeReader.CopyToAsync(_httpContext.Response.BodyWriter, cancellationToken);
+            await pipeReader.CompleteAsync();
+        }
+        catch (Exception ex)
+        {
+            _httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            await _httpContext.Response.WriteAsync(ex.Message);
+        }
     }
 
     private async Task ReadResponse(PipeReader pipeReader, CancellationToken cancellationToken)

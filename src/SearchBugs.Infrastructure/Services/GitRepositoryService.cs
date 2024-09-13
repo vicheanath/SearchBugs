@@ -20,12 +20,12 @@ internal sealed partial class GitRepositoryService : IGitRepositoryService
     public Result<IEnumerable<GitTreeItem>> ListTree(string commitSha, string repoPath)
     {
         var _repoPath = Path.Combine(_basePath, repoPath);
-        using (var repo = new Repository(_basePath))
+        if (!Directory.Exists(_repoPath)) return Result.Failure<IEnumerable<GitTreeItem>>(GitErrors.RepositoryNotFound);
+        using (var repo = new Repository(_repoPath))
         {
             var commit = repo.Lookup<Commit>(commitSha) ?? repo.Head.Tip;
+            if (commit == null) return Result.Failure<IEnumerable<GitTreeItem>>(GitErrors.InvalidCommitPath);
             var tree = commit.Tree;
-
-            if (tree == null) return Result.Failure<IEnumerable<GitTreeItem>>(GitErrors.InvalidCommitPath);
 
             return tree.Select(entry => new GitTreeItem
             {
@@ -36,14 +36,15 @@ internal sealed partial class GitRepositoryService : IGitRepositoryService
         }
     }
 
-    public Result<string> GetFileContent(string commitSha, string filePath)
+    public Result<string> GetFileContent(string repoPath, string commitSha, string filePath)
     {
-        var _repoPath = Path.Combine(_basePath, filePath);
+        var _repoPath = Path.Combine(_basePath, repoPath);
         using (var repo = new Repository(_repoPath))
         {
-            var commit = repo.Lookup<Commit>(commitSha) ?? repo.Head.Tip;
-            var blob = commit[filePath]?.Target as Blob;
+            var commit = repo.Lookup<Commit>(commitSha);
+            if (commit == null) return Result.Failure<string>(GitErrors.InvalidCommitPath);
 
+            var blob = commit[filePath]?.Target as Blob;
             if (blob == null) return Result.Failure<string>(GitErrors.FileNotFound);
 
             return blob.GetContentText();
