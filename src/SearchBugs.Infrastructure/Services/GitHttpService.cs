@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using SearchBugs.Domain.Repositories;
+using SearchBugs.Domain.Git;
 using SearchBugs.Infrastructure.Options;
 using System.Buffers;
 using System.Diagnostics;
@@ -8,13 +8,13 @@ using System.IO.Pipelines;
 using System.Text;
 namespace SearchBugs.Infrastructure.Services;
 
-internal class GitService : IGitService
+internal class GitHttpService : IGitHttpService
 {
     private readonly GitOptions _gitOptions;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private HttpContext _httpContext => _httpContextAccessor.HttpContext!;
 
-    public GitService(IOptions<GitOptions> gitOptions, IHttpContextAccessor httpContextAccessor)
+    public GitHttpService(IOptions<GitOptions> gitOptions, IHttpContextAccessor httpContextAccessor)
     {
         _gitOptions = gitOptions.Value;
         _httpContextAccessor = httpContextAccessor;
@@ -102,6 +102,7 @@ internal class GitService : IGitService
 
         return (reader.Position, false);
     }
+
 }
 
 

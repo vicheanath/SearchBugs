@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
-using SearchBugs.Domain.Repositories;
+using SearchBugs.Domain.Git;
 using SearchBugs.Domain.Services;
 using SearchBugs.Domain.Users;
 using SearchBugs.Infrastructure.Authentication;
@@ -33,7 +33,7 @@ public static class DependencyInjection
         services.ConfigureOptions<GitOptionsSetup>();
         services.AddScoped<IPasswordHashingService, PasswordHashingService>();
         services.AddScoped<IDataEncryptionService, DataEncryptionService>();
-        services.AddScoped<IGitService, GitService>();
+        services.AddScoped<IGitHttpService, GitHttpService>();
         services.AddScoped<IGitRepositoryService, GitRepositoryService>();
 
         services.AddCors(options =>

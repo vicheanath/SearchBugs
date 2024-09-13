@@ -397,4 +397,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-/SearchBugs.Api/repo/
+src/SearchBugs.Api/repo/

@@ -1,4 +1,5 @@
 ﻿using SearchBugs.Domain;
+using SearchBugs.Domain.Git;
 using SearchBugs.Domain.Projects;
 using SearchBugs.Domain.Repositories;
 using Shared.Messaging;
@@ -8,12 +9,12 @@ namespace SearchBugs.Application.Git.CreateGitRepo;
 
 public sealed class CreateGitRepoCommandHandler : ICommandHandler<CreateGitRepoCommand>
 {
-    private readonly IGitService _gitRepoService;
+    private readonly IGitHttpService _gitRepoService;
     private readonly IGitRepository _gitRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IProjectRepository _projectRepository;
 
-    public CreateGitRepoCommandHandler(IGitService gitService, IGitRepository gitRepository, IUnitOfWork unitOfWork, IProjectRepository projectRepository)
+    public CreateGitRepoCommandHandler(IGitHttpService gitService, IGitRepository gitRepository, IUnitOfWork unitOfWork, IProjectRepository projectRepository)
     {
         _gitRepoService = gitService;
         _gitRepository = gitRepository;
@@ -28,7 +29,7 @@ public sealed class CreateGitRepoCommandHandler : ICommandHandler<CreateGitRepoC
 
         if (project.IsFailure)
             return Result.Failure(project.Error);
-        //_gitRepoService.CreateRepository(repo.Name);
+        //var repo = await _gitRepoService.CreateRepository(repo.Name);
         await _gitRepository.Add(repo);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success();
