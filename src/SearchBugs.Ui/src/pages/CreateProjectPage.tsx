@@ -46,7 +46,7 @@ export const CreateProjectPage = () => {
   };
 
   return (
-    <main className="flex items-start gap-4 p-4 ">
+    <div className="flex flex-col gap-3 md:gap-8">
       <div className="mx-auto grid flex-1 auto-rows-max gap-4">
         <div className="flex items-center gap-4">
           <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
@@ -86,6 +86,6 @@ export const CreateProjectPage = () => {
           </CardContent>
         </Card>
       </div>
-    </main>
+    </div>
   );
 };

@@ -5,8 +5,8 @@ interface ErrorResult {
 }
 
 interface ApiResult<T> {
-    value: T[];
-    error: ErrorResult[];
+    value: T;
+    error: ErrorResult;
     isFailure : boolean;
     isSuccess : boolean;
 }

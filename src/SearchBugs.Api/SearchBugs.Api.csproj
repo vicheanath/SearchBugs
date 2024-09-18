@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="repo\string\**" />
+    <Content Remove="repo\string\**" />
+    <EmbeddedResource Remove="repo\string\**" />
+    <None Remove="repo\string\**" />
+  </ItemGroup>
+
+  <ItemGroup>
 	  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8" />
 	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
@@ -22,10 +29,6 @@
     <ProjectReference Include="..\SearchBugs.Infrastructure\SearchBugs.Infrastructure.csproj" />
     <ProjectReference Include="..\SearchBugs.Persistence\SearchBugs.Persistence.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="repo\string\" />
   </ItemGroup>
 
 </Project>

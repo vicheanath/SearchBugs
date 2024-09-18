@@ -41,7 +41,7 @@ export const BugsPage = () => {
   const { data } = useApi<Bug>("bugs");
   const navigate = useNavigate();
   return (
-    <main className="flex flex-col p-4 gap-3 sm:px-6 sm:py-0 md:gap-8">
+    <div className="flex flex-col gap-3 md:gap-8">
       <div className="flex items-center">
         <h5 className="text-lg font-semibold">Bugs</h5>
         <div className="ml-auto flex items-center gap-2">
@@ -133,6 +133,6 @@ export const BugsPage = () => {
           </span>
         </CardFooter>
       </Card>
-    </main>
+    </div>
   );
 };
