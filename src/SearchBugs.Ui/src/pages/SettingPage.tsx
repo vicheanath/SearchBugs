@@ -13,7 +13,7 @@ import { NavLink } from "react-router-dom";
 
 export const SettingPage = () => {
   return (
-    <>
+    <div className="flex flex-col gap-3 md:gap-8">
       <div className="mx-auto grid w-full max-w-6xl gap-2">
         <h1 className="text-3xl font-semibold">Settings</h1>
       </div>
@@ -79,6 +79,6 @@ export const SettingPage = () => {
           </Card>
         </div>
       </div>
-    </>
+    </div>
   );
 };

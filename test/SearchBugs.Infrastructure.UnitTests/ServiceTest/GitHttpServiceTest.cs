@@ -101,7 +101,7 @@ public class GitHttpServiceTest
         }));
 
         // Act
-        Func<Task> act = async () => await service.Handle("invalid-repo");
+        Func<Task> act = async () => await service.Handle("invalid-repo-axz");
 
         // Assert 
         await act.Should().NotThrowAsync();
@@ -166,7 +166,7 @@ public class GitHttpServiceTest
         }));
 
         // Act
-        Func<Task> act = async () => await service.Handle("invalid-repo");
+        Func<Task> act = async () => await service.Handle("invalid-repo-acx");
 
         // Assert 
         await act.Should().NotThrowAsync();
