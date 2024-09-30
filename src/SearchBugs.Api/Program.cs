@@ -33,7 +33,7 @@ public partial class Program
         app.MapProjectsEndpoints();
         app.MapRepoEndpoints();
 
-        app.UseHttpsRedirection();
+        // app.UseHttpsRedirection();
         app.UseAuthentication();
 
         app.UseMiddleware<ExceptionHandlingMiddleware>();

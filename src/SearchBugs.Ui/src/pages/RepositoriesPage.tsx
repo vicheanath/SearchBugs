@@ -1,129 +1,101 @@
-import { ListFilter, MoreHorizontal, PlusCircle } from "lucide-react";
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  AlertCircle,
+  Book,
+  Eye,
+  Code,
+  GitFork,
+  GitPullRequest,
+  Play,
+  Star,
+} from "lucide-react";
+import { CodeTree } from "@/modules/repository/CodeTree";
 
-import {
-  DropdownMenuCheckboxItem,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
+export const RepositoryPage: React.FC = () => {
 
-import { useApi } from "@/hooks/useApi";
-import { useNavigate } from "react-router-dom";
-interface Repository {
-  id: string;
-  name: string;
-  url: string;
-  description: string;
-  createdOnUtc: string;
-}
-
-export const RepositoriesPage = () => {
-  const navigate = useNavigate();
-  const { data } = useApi<Repository>("repo");
   return (
-    <div className="flex flex-col gap-3 md:gap-8">
-      <div className="flex items-center">
-        <h5 className="text-lg font-semibold">Bugs</h5>
-        <div className="ml-auto flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="h-7 gap-1">
-                <ListFilter className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Filter
-                </span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuCheckboxItem checked>Open</DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>In Progress</DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Closed</DropdownMenuCheckboxItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button
-            size="sm"
-            className="h-7 gap-1"
-            onClick={() => navigate("/repositories/add")}
-          >
-            <PlusCircle className="h-3.5 w-3.5" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Add Bug
-            </span>
+    <div className="container mx-auto p-4">
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <Book className="h-5 w-5" />
+          <h1 className="text-xl font-semibold">
+            <a href="#" className="text-blue-600 hover:underline">
+              username
+            </a>{" "}
+            /{" "}
+            <a href="#" className="text-blue-600 hover:underline">
+              repository-name
+            </a>
+          </h1>
+          <Badge variant="outline">Public</Badge>
+        </div>
+        <div className="flex space-x-2">
+          <Button variant="outline" size="sm">
+            <Eye className="mr-2 h-4 w-4" />
+            Watch
+          </Button>
+          <Button variant="outline" size="sm">
+            <GitFork className="mr-2 h-4 w-4" />
+            Fork
+          </Button>
+          <Button variant="outline" size="sm">
+            <Star className="mr-2 h-4 w-4" />
+            Star
           </Button>
         </div>
       </div>
-      <Card x-chunk="dashboard-06-chunk-0">
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>
-                  <span className="sr-only">Actions</span>
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data?.value.map((repo) => (
-                <TableRow key={repo.id}>
-                  <TableCell>{repo.name}</TableCell>
-                  <TableCell>{repo.description}</TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="h-7 w-7">
-                          <MoreHorizontal className="h-3.5 w-3.5" />
-                          <span className="sr-only">Actions</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          onClick={() => navigate(`/repositories/${repo.id}`)}
-                        >
-                          View
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() =>
-                            navigate(`/repositories/${repo.id}/edit`)
-                          }
-                        >
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-        <CardFooter>
-            <span className="text-sm text-gray-500">
-                {data?.value.length} repositories
-            </span>
-        </CardFooter>
-      </Card>
+      <Tabs defaultValue="code" className="mb-4">
+        <TabsList>
+          <TabsTrigger value="code">
+            <Code className="mr-2 h-4 w-4" />
+            Code
+          </TabsTrigger>
+          <TabsTrigger value="issues">
+            <AlertCircle className="mr-2 h-4 w-4" />
+            Issues
+          </TabsTrigger>
+          <TabsTrigger value="pull-requests">
+            <GitPullRequest className="mr-2 h-4 w-4" />
+            Pull requests
+          </TabsTrigger>
+          <TabsTrigger value="actions">
+            <Play className="mr-2 h-4 w-4" />
+            Actions
+          </TabsTrigger>
+          <TabsTrigger value="projects">
+            <svg
+              className="mr-2 h-4 w-4"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M8 6h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2" />
+              <path d="M12 4v4" />
+              <path d="M16 4v4" />
+              <path d="M8 4v4" />
+            </svg>
+            Projects
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="code" className="mt-4">
+            <CodeTree />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

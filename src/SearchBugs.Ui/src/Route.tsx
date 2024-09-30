@@ -7,10 +7,11 @@ import {
   DashboardPage,
   LoginPage,
   NotificationsPage,
+  ProfilePage,
   ProjectDetailsPage,
   ProjectsPage,
   RegisterPage,
-  RepositoriesPage,
+  RepositoryPage,
   RepositoryDetailsPage,
   SettingPage,
   UserDetailsPage,
@@ -51,12 +52,16 @@ const router = createBrowserRouter([
         element: <UsersPage />,
       },
       {
+        path: "/profile",
+        element: <ProfilePage />,
+      },
+      {
         path: "/users/:userId",
         element: <UserDetailsPage />,
       },
       {
-        path: "/repositories",
-        element: <RepositoriesPage />,
+        path: "/:username/:repository",
+        element: <RepositoryPage />,
       },
       {
         path: "/repositories/:url",
