@@ -1,30 +1,30 @@
 using System.Diagnostics;
 using System.IO.Pipelines;
+using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using SearchBugs.Domain.Git;
 using SearchBugs.Infrastructure.Options;
+
 namespace SearchBugs.Infrastructure.Services;
 
 internal class GitHttpService : IGitHttpService
 {
     private readonly GitOptions _gitOptions;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private HttpContext _httpContext => _httpContextAccessor.HttpContext!;
 
-    public GitHttpService(IOptions<GitOptions> gitOptions, IHttpContextAccessor httpContextAccessor)
+    public GitHttpService(IOptions<GitOptions> gitOptions)
     {
         _gitOptions = gitOptions.Value;
-        _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task DeleteRepository(string repositoryName, CancellationToken cancellationToken = default)
+    public Task DeleteRepository(string repositoryName, CancellationToken cancellationToken = default)
     {
         var gitPath = Path.Combine(_gitOptions.BasePath, repositoryName);
         if (Directory.Exists(gitPath))
         {
             Directory.Delete(gitPath, true);
         }
+        return Task.CompletedTask;
     }
 
     public async Task CreateRepository(string repositoryName, CancellationToken cancellationToken = default)
@@ -46,6 +46,11 @@ internal class GitHttpService : IGitHttpService
             };
             process.Start();
             await process.WaitForExitAsync(cancellationToken);
+            if (process.ExitCode != 0)
+            {
+                var error = await process.StandardError.ReadToEndAsync(cancellationToken);
+                throw new InvalidOperationException($"git init failed: {error}");
+            }
         }
     }
 
@@ -123,11 +128,11 @@ internal class GitHttpService : IGitHttpService
 
     private async Task HandleResponse(HttpContext context, Process process, CancellationToken cancellationToken)
     {
-        context.Response.StatusCode = StatusCodes.Status200OK;
-        context.Response.ContentType = process.StartInfo.Environment["CONTENT_TYPE"];
+        var stdout = process.StandardOutput.BaseStream;
+        await ReadCgiHeadersAsync(stdout, context.Response, cancellationToken);
 
         var outputPipe = PipeWriter.Create(context.Response.Body);
-        var inputPipe = PipeReader.Create(process.StandardOutput.BaseStream);
+        var inputPipe = PipeReader.Create(stdout);
 
         while (true)
         {
@@ -147,13 +152,67 @@ internal class GitHttpService : IGitHttpService
         }
 
         await outputPipe.FlushAsync(cancellationToken);
+
+        var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken);
         await process.WaitForExitAsync(cancellationToken);
+        var stderr = await stderrTask;
 
         if (process.ExitCode != 0)
         {
-            var error = await process.StandardError.ReadToEndAsync();
-            throw new InvalidOperationException($"Git error: {error}");
+            throw new InvalidOperationException($"Git error: {stderr}");
         }
+    }
+
+    /// <summary>
+    /// Reads CGI-style headers from git-http-backend stdout (until \r\n\r\n),
+    /// applies Status and Content-Type to the response. The body is left on the stream for the caller to read.
+    /// </summary>
+    private static async Task ReadCgiHeadersAsync(
+        Stream stdout,
+        HttpResponse response,
+        CancellationToken cancellationToken)
+    {
+        var buffer = new List<byte>();
+        byte[] end = [ (byte)'\r', (byte)'\n', (byte)'\r', (byte)'\n' ];
+        var chunk = new byte[1];
+
+        while (true)
+        {
+            var read = await stdout.ReadAsync(chunk, cancellationToken);
+            if (read == 0)
+                break;
+            buffer.Add(chunk[0]);
+            if (buffer.Count >= 4 &&
+                buffer[^4] == end[0] && buffer[^3] == end[1] && buffer[^2] == end[2] && buffer[^1] == end[3])
+                break;
+        }
+
+        if (buffer.Count < 4)
+            return;
+
+        var headerBytes = buffer.Take(buffer.Count - 4).ToArray();
+        var headerText = Encoding.ASCII.GetString(headerBytes);
+        var statusCode = StatusCodes.Status200OK;
+        var contentType = (string?)null;
+
+        foreach (var line in headerText.Split("\r\n", StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (line.StartsWith("Status:", StringComparison.OrdinalIgnoreCase))
+            {
+                var rest = line.AsSpan().Slice(7).Trim();
+                var space = rest.IndexOf(' ');
+                if (space >= 0)
+                    int.TryParse(rest.Slice(0, space).ToString(), out statusCode);
+            }
+            else if (line.StartsWith("Content-type:", StringComparison.OrdinalIgnoreCase))
+            {
+                contentType = line.AsSpan().Slice(12).Trim().ToString();
+            }
+        }
+
+        response.StatusCode = statusCode;
+        if (!string.IsNullOrEmpty(contentType))
+            response.ContentType = contentType;
     }
 }
 

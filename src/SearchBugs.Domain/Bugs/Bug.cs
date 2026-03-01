@@ -130,7 +130,7 @@ public class Bug : Entity<BugId>, IAuditable
             return Result.Failure(BugsErrors.InvalidTitle);
 
         if (string.IsNullOrWhiteSpace(description))
-            return Result.Failure(BugsErrors.InvalidTitle);
+            return Result.Failure(BugsErrors.InvalidDescription);
 
         if (string.IsNullOrWhiteSpace(severity))
             return Result.Failure(BugsErrors.InvalidBugSeverity);

@@ -17,4 +17,8 @@ public static class GitErrors
     public static Error RepositoryAlreadyExists = new Error("Git.RepositoryAlreadyExists", "Repository already exists.");
 
     public static Error CloneFailure(string message) => new Error("Git.CloneFailure", $"Failed to clone repository: {message}");
+
+    public static Error PushFailure(string message) => new Error("Git.PushFailure", $"Failed to push: {message}");
+
+    public static Error PullFailure(string message) => new Error("Git.PullFailure", $"Failed to pull: {message}");
 }

@@ -11,15 +11,10 @@ namespace SearchBugs.Infrastructure.UnitTests.ServiceTest;
 public class GitHttpServiceTest
 {
     private readonly GitOptions _gitOptions;
-    private readonly HttpContextAccessor _httpContextAccessor;
 
     public GitHttpServiceTest()
     {
         _gitOptions = new OptionsTest().Value;
-        _httpContextAccessor = new HttpContextAccessor
-        {
-            HttpContext = new DefaultHttpContext()
-        };
     }
 
     private string GetOrCreateRepository(string repositoryName)
@@ -48,7 +43,7 @@ public class GitHttpServiceTest
     public void Handle_GitClone_Success()
     {
         // Arrange
-        var service = new GitHttpService(new OptionsTest(), _httpContextAccessor);
+        var service = new GitHttpService(new OptionsTest());
         var repositoryName = $"test-repo-{Guid.NewGuid():N}"; // Use unique name for each test
         // create Test repository
         var repoPath = GetOrCreateRepository(repositoryName);

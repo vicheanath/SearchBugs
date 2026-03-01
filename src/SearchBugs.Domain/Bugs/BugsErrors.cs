@@ -18,4 +18,6 @@ internal static class BugsErrors
     internal static Error InvalidReporterId => new Error("Bug.InvalidReporterId", "Invalid reporter id");
 
     internal static Error InvalidTitle => new Error("Bug.InvalidTitle", "Invalid title");
+
+    internal static Error InvalidDescription => new Error("Bug.InvalidDescription", "Description is required");
 }

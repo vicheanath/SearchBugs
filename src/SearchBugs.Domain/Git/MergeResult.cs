@@ -1,10 +1,9 @@
-namespace SearchBugs.Infrastructure.Services;
-
+namespace SearchBugs.Domain.Git;
 
 public record MergeResult
 {
-    public string Status { get; init; }
-    public string CommitSha { get; init; }
+    public string Status { get; init; } = string.Empty;
+    public string CommitSha { get; init; } = string.Empty;
 }
 
 

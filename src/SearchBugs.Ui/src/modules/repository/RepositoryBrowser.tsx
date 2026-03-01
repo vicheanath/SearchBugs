@@ -31,9 +31,15 @@ import {
   Eye,
   ChevronRight,
   Home,
+  GitMerge,
+  Upload,
+  PullRequest,
 } from "lucide-react";
 import { apiClient, GitTreeItem } from "@/lib/api";
 import { cn } from "@/lib/utils";
+import { RepositoryCommits } from "./RepositoryCommits";
+import { RepositoryPullRequests } from "./RepositoryPullRequests";
+import { useToast } from "@/hooks/use-toast";
 
 interface RepositoryBrowserProps {
   repoUrl: string;
@@ -56,6 +62,10 @@ export const RepositoryBrowser: React.FC<RepositoryBrowserProps> = ({
   const [fileContent, setFileContent] = useState<string>("");
   const [showCloneDialog, setShowCloneDialog] = useState(false);
   const [cloneTargetPath, setCloneTargetPath] = useState("");
+  const [showMergeDialog, setShowMergeDialog] = useState(false);
+  const [mergeSourceBranch, setMergeSourceBranch] = useState("");
+  const [mergeTargetBranch, setMergeTargetBranch] = useState("");
+  const { toast } = useToast();
 
   // Get branches
   const { data: branches = [], refetch: refetchBranches } = useQuery({
@@ -133,13 +143,53 @@ export const RepositoryBrowser: React.FC<RepositoryBrowserProps> = ({
       return await apiClient.repositories.clone(repoUrl, targetPath);
     },
     onSuccess: () => {
-      console.log("Repository cloned successfully");
+      toast({ title: "Repository cloned successfully" });
       setShowCloneDialog(false);
       setCloneTargetPath("");
     },
     onError: (error: Error) => {
-      console.error("Failed to clone repository:", error.message);
+      toast({ title: "Clone failed", description: error.message, variant: "destructive" });
     },
+  });
+
+  const pushMutation = useMutation({
+    mutationFn: async () => apiClient.repositories.push(repoUrl, { branchName: currentBranch }),
+    onSuccess: () => toast({ title: "Push completed" }),
+    onError: (e: Error) => toast({ title: "Push failed", description: e.message, variant: "destructive" }),
+  });
+
+  const pullMutation = useMutation({
+    mutationFn: async () =>
+      apiClient.repositories.pull(repoUrl, {
+        branchName: currentBranch,
+        authorName: "Web User",
+        authorEmail: "web@local",
+      }),
+    onSuccess: () => {
+      toast({ title: "Pull completed" });
+      refetchTree();
+      refetchBranches();
+    },
+    onError: (e: Error) => toast({ title: "Pull failed", description: e.message, variant: "destructive" }),
+  });
+
+  const mergeMutation = useMutation({
+    mutationFn: async () =>
+      apiClient.repositories.merge(repoUrl, {
+        sourceBranch: mergeSourceBranch,
+        targetBranch: mergeTargetBranch,
+        authorName: "Web User",
+        authorEmail: "web@local",
+      }),
+    onSuccess: () => {
+      toast({ title: "Merge completed" });
+      setShowMergeDialog(false);
+      setMergeSourceBranch("");
+      setMergeTargetBranch("");
+      refetchBranches();
+      refetchTree();
+    },
+    onError: (e: Error) => toast({ title: "Merge failed", description: e.message, variant: "destructive" }),
   });
 
   // Update file content when selectedFile changes
@@ -292,6 +342,74 @@ export const RepositoryBrowser: React.FC<RepositoryBrowserProps> = ({
               </div>
             </DialogContent>
           </Dialog>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => pushMutation.mutate()}
+            disabled={pushMutation.isPending}
+          >
+            <Upload className="h-4 w-4 mr-2" />
+            {pushMutation.isPending ? "Pushing..." : "Push"}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => pullMutation.mutate()}
+            disabled={pullMutation.isPending}
+          >
+            <PullRequest className="h-4 w-4 mr-2" />
+            {pullMutation.isPending ? "Pulling..." : "Pull"}
+          </Button>
+
+          <Dialog open={showMergeDialog} onOpenChange={setShowMergeDialog}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                <GitMerge className="h-4 w-4 mr-2" />
+                Merge
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Merge branches</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium">Source branch</label>
+                  <Select value={mergeSourceBranch} onValueChange={setMergeSourceBranch}>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select source" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {branches.map((b) => (
+                        <SelectItem key={b} value={b}>{b}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Target branch</label>
+                  <Select value={mergeTargetBranch} onValueChange={setMergeTargetBranch}>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select target" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {branches.map((b) => (
+                        <SelectItem key={b} value={b}>{b}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button
+                  onClick={() => mergeMutation.mutate()}
+                  disabled={!mergeSourceBranch || !mergeTargetBranch || mergeMutation.isPending}
+                  className="w-full"
+                >
+                  {mergeMutation.isPending ? "Merging..." : "Merge"}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
@@ -328,12 +446,26 @@ export const RepositoryBrowser: React.FC<RepositoryBrowserProps> = ({
             <FolderOpen className="h-4 w-4 mr-2" />
             Files
           </TabsTrigger>
+          <TabsTrigger value="commits">
+            <Code2 className="h-4 w-4 mr-2" />
+            Commits
+          </TabsTrigger>
+          <TabsTrigger value="pull-requests">
+            <PullRequest className="h-4 w-4 mr-2" />
+            Pull requests
+          </TabsTrigger>
           <TabsTrigger value="preview" disabled={!selectedFile}>
             <Eye className="h-4 w-4 mr-2" />
             Preview
           </TabsTrigger>
         </TabsList>
 
+        <TabsContent value="commits">
+          <RepositoryCommits repoUrl={repoUrl} branch={currentBranch} />
+        </TabsContent>
+        <TabsContent value="pull-requests">
+          <RepositoryPullRequests repoUrl={repoUrl} branches={branches} />
+        </TabsContent>
         <TabsContent value="files">
           <Card>
             <CardContent className="p-0">

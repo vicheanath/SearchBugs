@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using SearchBugs.Domain.Git;
 using SearchBugs.Infrastructure.Options;
 using Shared.Results;
+using MergeResult = SearchBugs.Domain.Git.MergeResult;
 
 namespace SearchBugs.Infrastructure.Services;
 
@@ -129,17 +130,17 @@ internal sealed partial class GitRepositoryService : IGitRepositoryService
             var targetBranch = repo.Branches[targetBranchName];
 
             if (sourceBranch == null || targetBranch == null)
-                return Result.Failure<MergeResult>(GitErrors.BranchNotFound);
+                return Result.Failure<SearchBugs.Domain.Git.MergeResult>(GitErrors.BranchNotFound);
 
             // Merge
             var merger = new Signature(mergerName, mergerEmail, DateTimeOffset.Now);
-            var result = repo.Merge(sourceBranch, merger);
+            var mergeResult = repo.Merge(sourceBranch, merger);
 
-            return new MergeResult
+            return Result.Success(new SearchBugs.Domain.Git.MergeResult
             {
-                Status = result.Status.ToString(),
-                CommitSha = result.Commit?.Sha ?? string.Empty
-            };
+                Status = mergeResult.Status.ToString(),
+                CommitSha = mergeResult.Commit?.Sha ?? string.Empty
+            });
         }
     }
 
@@ -234,6 +235,84 @@ internal sealed partial class GitRepositoryService : IGitRepositoryService
         {
             return Result.Failure(GitErrors.CloneFailure(ex.Message));
         }
+    }
+
+    public Result Push(string repoPath, string branchName, string? remoteName = "origin")
+    {
+        var fullPath = Path.Combine(_basePath, repoPath);
+        if (!Directory.Exists(fullPath))
+            return Result.Failure(GitErrors.RepositoryNotFound);
+        try
+        {
+            using var repo = new Repository(fullPath);
+            var branch = repo.Branches[branchName];
+            if (branch == null)
+                return Result.Failure(GitErrors.BranchNotFound);
+            var remote = repo.Network.Remotes[remoteName ?? "origin"];
+            if (remote == null)
+                return Result.Failure(GitErrors.PushFailure("Remote not found."));
+            var options = new PushOptions
+            {
+                CredentialsProvider = (_, __, ___) => null
+            };
+            repo.Network.Push(branch, options);
+            return Result.Success();
+        }
+        catch (LibGit2SharpException ex)
+        {
+            return Result.Failure(GitErrors.PushFailure(ex.Message));
+        }
+    }
+
+    public Result Pull(string repoPath, string branchName, string authorName, string authorEmail, string? remoteName = "origin")
+    {
+        var fullPath = Path.Combine(_basePath, repoPath);
+        if (!Directory.Exists(fullPath))
+            return Result.Failure(GitErrors.RepositoryNotFound);
+        try
+        {
+            using var repo = new Repository(fullPath);
+            var branch = repo.Branches[branchName];
+            if (branch == null)
+                return Result.Failure(GitErrors.BranchNotFound);
+            Commands.Checkout(repo, branch);
+            var signature = new Signature(authorName, authorEmail, DateTimeOffset.UtcNow);
+            var options = new PullOptions
+            {
+                FetchOptions = new FetchOptions
+                {
+                    CredentialsProvider = (_, __, ___) => null
+                }
+            };
+            Commands.Pull(repo, signature, options);
+            return Result.Success();
+        }
+        catch (LibGit2SharpException ex)
+        {
+            return Result.Failure(GitErrors.PullFailure(ex.Message));
+        }
+    }
+
+    public Result<IEnumerable<CommitInfo>> GetCommits(string repoPath, string? branchName, int skip, int take)
+    {
+        var fullPath = Path.Combine(_basePath, repoPath);
+        if (!Directory.Exists(fullPath))
+            return Result.Failure<IEnumerable<CommitInfo>>(GitErrors.RepositoryNotFound);
+        using var repo = new Repository(fullPath);
+        IEnumerable<Commit> commits = branchName != null && repo.Branches[branchName] != null
+            ? repo.Branches[branchName].Commits
+            : repo.Commits;
+        var list = commits
+            .Skip(skip)
+            .Take(take)
+            .Select(c => new CommitInfo(
+                c.Sha,
+                c.Message,
+                c.Author.Name,
+                c.Author.Email,
+                c.Author.When.UtcDateTime))
+            .ToList();
+        return Result.Success(list.AsEnumerable());
     }
 }
 

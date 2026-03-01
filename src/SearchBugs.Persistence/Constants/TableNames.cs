@@ -25,5 +25,5 @@ internal static class TableNames
     internal const string Notifications = "notification";
     internal const string BugRepository = "bug_repository";
     internal const string Repository = "repository";
-
+    internal const string PullRequests = "pull_request";
 }

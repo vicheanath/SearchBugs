@@ -16,4 +16,7 @@ public interface IGitRepositoryService
     Result<MergeResult> MergeBranches(string repoPath, string sourceBranchName, string targetBranchName, string mergerName, string mergerEmail);
     Result<IEnumerable<string>> GetBranches(string repoPath);
     Result CloneRepository(string sourceUrl, string targetPath);
+    Result Push(string repoPath, string branchName, string? remoteName = "origin");
+    Result Pull(string repoPath, string branchName, string authorName, string authorEmail, string? remoteName = "origin");
+    Result<IEnumerable<CommitInfo>> GetCommits(string repoPath, string? branchName, int skip, int take);
 }

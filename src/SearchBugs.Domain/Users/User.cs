@@ -34,7 +34,7 @@ public class User : Entity<UserId>, IAuditable
     {
         var id = new UserId(Guid.NewGuid());
         var user = new User(id, name, email, password, SystemTime.UtcNow);
-        return user;
+        return Result.Create(user);
     }
 
     public void Update(Name name)

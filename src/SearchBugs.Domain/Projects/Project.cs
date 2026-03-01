@@ -42,13 +42,15 @@ public class Project : Entity<ProjectId>, IAuditable
     public static Result<Project> Create(string name, string description)
     {
         var id = new ProjectId(Guid.NewGuid());
-        return new Project(id, name, description, SystemTime.UtcNow);
+        var project = new Project(id, name, description, SystemTime.UtcNow);
+        return Result.Create(project);
     }
 
     public void Update(string name, string description)
     {
         Name = name;
         Description = description;
+        ModifiedOnUtc = SystemTime.UtcNow;
     }
 
     public void AddUser(User user)

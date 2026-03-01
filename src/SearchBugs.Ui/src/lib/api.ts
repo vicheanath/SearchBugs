@@ -309,6 +309,53 @@ export interface FileDiff {
   patch: string;
 }
 
+export interface CommitInfoDto {
+  sha: string;
+  message: string;
+  authorName: string;
+  authorEmail: string;
+  when: string;
+}
+
+export interface PullRequestListItemDto {
+  id: string;
+  title: string;
+  sourceBranch: string;
+  targetBranch: string;
+  status: string;
+  createdBy: string;
+  createdAtUtc: string;
+}
+
+export interface PullRequestDetailDto {
+  id: string;
+  repoUrl: string;
+  sourceBranch: string;
+  targetBranch: string;
+  title: string;
+  description: string;
+  status: string;
+  createdBy: string;
+  createdAtUtc: string;
+  mergedAtUtc?: string;
+  mergedBy?: string;
+  diff: FileDiff[];
+}
+
+export interface PullRequestDto {
+  id: string;
+  repoUrl: string;
+  sourceBranch: string;
+  targetBranch: string;
+  title: string;
+  description: string;
+  status: string;
+  createdBy: string;
+  createdAtUtc: string;
+  mergedAtUtc?: string;
+  mergedBy?: string;
+}
+
 // Enums
 export enum BugStatus {
   New = "New",
@@ -638,6 +685,29 @@ export const apiClient = {
       ),
     clone: (url: string, targetPath: string) =>
       api.post(`/repo/${encodeURIComponent(url)}/clone`, { targetPath }),
+    merge: (url: string, data: { sourceBranch: string; targetBranch: string; authorName: string; authorEmail: string }) =>
+      api.post(`/repo/${encodeURIComponent(url)}/merge`, data),
+    push: (url: string, data: { branchName: string; remoteName?: string }) =>
+      api.post(`/repo/${encodeURIComponent(url)}/push`, data),
+    pull: (url: string, data: { branchName: string; authorName: string; authorEmail: string; remoteName?: string }) =>
+      api.post(`/repo/${encodeURIComponent(url)}/pull`, data),
+    getCommits: (url: string, params?: { branch?: string; skip?: number; take?: number }) => {
+      const search = new URLSearchParams();
+      if (params?.branch) search.set("branch", params.branch);
+      if (params?.skip != null) search.set("skip", String(params.skip));
+      if (params?.take != null) search.set("take", String(params.take));
+      return api.get<ApiResponse<CommitInfoDto[]>>(`/repo/${encodeURIComponent(url)}/commits?${search}`);
+    },
+    getCompare: (url: string, baseSha: string, compareSha: string) =>
+      api.get<ApiResponse<FileDiff[]>>(`/repo/${encodeURIComponent(url)}/compare?baseSha=${encodeURIComponent(baseSha)}&compare=${encodeURIComponent(compareSha)}`),
+    getPullRequests: (url: string, status?: string) =>
+      api.get<ApiResponse<PullRequestListItemDto[]>>(`/repo/${encodeURIComponent(url)}/pull-requests${status ? `?status=${status}` : ""}`),
+    getPullRequest: (url: string, id: string) =>
+      api.get<ApiResponse<PullRequestDetailDto>>(`/repo/${encodeURIComponent(url)}/pull-requests/${id}`),
+    createPullRequest: (url: string, data: { sourceBranch: string; targetBranch: string; title: string; description: string; createdByUserId: string }) =>
+      api.post<ApiResponse<PullRequestDto>>(`/repo/${encodeURIComponent(url)}/pull-requests`, data),
+    mergePullRequest: (url: string, id: string, data: { authorName: string; authorEmail: string; mergedByUserId: string }) =>
+      api.post(`/repo/${encodeURIComponent(url)}/pull-requests/${id}/merge`, data),
   },
 
   // Test Notifications
