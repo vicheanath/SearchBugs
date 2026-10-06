@@ -108,7 +108,7 @@ export const AdminBanner: React.FC<AdminBannerProps> = ({
   };
 
   return (
-    <Card className="mb-4 bg-gradient-to-r from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-950 border-slate-300 dark:border-slate-700 mt-4">
+    <Card className="mb-4 bg-linear-to-r from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-950 border-slate-300 dark:border-slate-700 mt-4">
       <CardContent className="py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center">

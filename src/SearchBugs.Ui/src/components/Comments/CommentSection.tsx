@@ -32,7 +32,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
   return (
     <div className={`space-y-4 ${className}`}>
       {/* Comments Display */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-none shadow-xs">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
             <MessageSquare className="w-5 h-5" />

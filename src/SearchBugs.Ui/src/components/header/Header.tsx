@@ -160,12 +160,12 @@ export const Header = () => {
   );
 
   return (
-    <header className="bg-card border-b shadow-sm sticky top-0 z-40">
+    <header className="bg-card border-b shadow-xs sticky top-0 z-40">
       <div className="container mx-auto flex items-center justify-between p-3 sm:p-4">
         {/* Logo and Search - Left Section */}
         <div className="flex items-center space-x-3 sm:space-x-4 flex-1 min-w-0">
           <div
-            className="flex items-center space-x-2 cursor-pointer flex-shrink-0"
+            className="flex items-center space-x-2 cursor-pointer shrink-0"
             onClick={() => navigate("/")}
           >
             <div className="h-7 w-7 sm:h-8 sm:w-8 bg-primary rounded-lg flex items-center justify-center">
@@ -191,7 +191,7 @@ export const Header = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden flex-shrink-0"
+            className="md:hidden shrink-0"
             onClick={() => setIsSearchVisible(!isSearchVisible)}
             aria-label="Toggle search"
           >
@@ -224,7 +224,7 @@ export const Header = () => {
         </nav>
 
         {/* User Actions - Right Section */}
-        <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+        <div className="flex items-center space-x-1 sm:space-x-2 shrink-0">
           {/* Hide timezone on small screens */}
           <div className="hidden sm:block">
             <TimezoneIndicator />
@@ -344,7 +344,7 @@ export const Header = () => {
 
       {/* Mobile Search Bar */}
       {isSearchVisible && (
-        <div className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden">
+        <div className="border-t bg-background/95 backdrop-blur-sm supports-backdrop-filter:bg-background/60 md:hidden">
           <div className="container mx-auto p-3">
             <div className="relative">
               <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />

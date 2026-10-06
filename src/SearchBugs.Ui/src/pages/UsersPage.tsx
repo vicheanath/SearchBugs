@@ -349,7 +349,7 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
                   key={role.id}
                   type="button"
                   variant={
-                    selectedRoles.includes(role.name) ? "default" : "outline"
+                    selectedRoles.includes(role.name) ? "default" : "outline-solid"
                   }
                   size="sm"
                   onClick={() => toggleRole(role.name)}

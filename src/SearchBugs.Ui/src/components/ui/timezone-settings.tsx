@@ -73,7 +73,7 @@ export const TimezoneSettings: React.FC<TimezoneSettingsProps> = ({
               </Label>
             </div>
             <Button
-              variant={useAutoDetection ? "default" : "outline"}
+              variant={useAutoDetection ? "default" : "outline-solid"}
               size="sm"
               onClick={handleAutoDetectionToggle}
             >

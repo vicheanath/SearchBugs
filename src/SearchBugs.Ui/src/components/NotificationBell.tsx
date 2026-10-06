@@ -160,7 +160,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "relative p-2 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg",
+          "relative p-2 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100 transition-all duration-200 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg",
           hasNewNotifications && "animate-pulse"
         )}
         aria-label={`Notifications ${
@@ -201,7 +201,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = () => {
       {isOpen && (
         <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden">
           {/* Header */}
-          <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600">
+          <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 dark:border-gray-700 bg-linear-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
@@ -266,7 +266,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = () => {
                     )}
                   >
                     <div className="flex items-start space-x-3">
-                      <div className="flex-shrink-0 mt-1">
+                      <div className="shrink-0 mt-1">
                         {getNotificationIcon(notification.type)}
                       </div>
 
@@ -302,7 +302,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = () => {
                       </div>
 
                       {!notification.isRead && (
-                        <div className="flex-shrink-0 flex items-center gap-1 sm:gap-2">
+                        <div className="shrink-0 flex items-center gap-1 sm:gap-2">
                           <div className="w-2 h-2 bg-blue-500 rounded-full" />
                           <button
                             onClick={(e) => {

@@ -240,7 +240,7 @@ export const NotificationsPage = () => {
         {/* Filters */}
         <div className="flex gap-2 mb-4">
           <Button
-            variant={filters.isRead === undefined ? "default" : "outline"}
+            variant={filters.isRead === undefined ? "default" : "outline-solid"}
             size="sm"
             onClick={() => handleFilterChange({ isRead: undefined })}
           >
@@ -249,7 +249,7 @@ export const NotificationsPage = () => {
           </Button>
 
           <Button
-            variant={filters.isRead === false ? "default" : "outline"}
+            variant={filters.isRead === false ? "default" : "outline-solid"}
             size="sm"
             onClick={() => handleFilterChange({ isRead: false })}
           >
@@ -257,7 +257,7 @@ export const NotificationsPage = () => {
           </Button>
 
           <Button
-            variant={filters.isRead === true ? "default" : "outline"}
+            variant={filters.isRead === true ? "default" : "outline-solid"}
             size="sm"
             onClick={() => handleFilterChange({ isRead: true })}
           >
@@ -344,7 +344,7 @@ export const NotificationsPage = () => {
                           {notification.message}
                         </p>
                         {!notification.isRead && (
-                          <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0" />
+                          <div className="w-2 h-2 bg-blue-500 rounded-full shrink-0" />
                         )}
                       </div>
 

@@ -109,7 +109,7 @@ export const ThemeSettings = () => {
                 >
                   {/* Theme Preview */}
                   <div
-                    className={`w-12 h-8 rounded border-2 ${option.preview} flex-shrink-0`}
+                    className={`w-12 h-8 rounded border-2 ${option.preview} shrink-0`}
                   >
                     <div className="w-full h-full rounded flex items-center justify-center">
                       <div
@@ -118,7 +118,7 @@ export const ThemeSettings = () => {
                             ? "bg-yellow-400"
                             : option.id === "dark"
                             ? "bg-blue-400"
-                            : "bg-gradient-to-r from-yellow-400 to-blue-400"
+                            : "bg-linear-to-r from-yellow-400 to-blue-400"
                         }`}
                       />
                     </div>
@@ -137,7 +137,7 @@ export const ThemeSettings = () => {
 
                   {/* Selection Indicator */}
                   {isSelected && (
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                       <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center">
                         <Check className="h-3 w-3 text-primary-foreground" />
                       </div>

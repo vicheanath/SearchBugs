@@ -66,7 +66,7 @@ export const DashboardPage: React.FC = () => {
   return (
     <main className="container mx-auto py-6 space-y-6 max-w-7xl">
       {/* Header */}
-      <div className="flex items-center justify-between bg-card p-6 rounded-lg shadow-sm">
+      <div className="flex items-center justify-between bg-card p-6 rounded-lg shadow-xs">
         <div className="flex items-center space-x-4">
           <Avatar className="h-16 w-16">
             <AvatarFallback className="bg-primary text-primary-foreground text-lg">
@@ -198,7 +198,7 @@ export const DashboardPage: React.FC = () => {
                               ? "default"
                               : bug.status === "InProgress"
                               ? "secondary"
-                              : "outline"
+                              : "outline-solid"
                           }
                           className="text-xs"
                         >
@@ -210,7 +210,7 @@ export const DashboardPage: React.FC = () => {
                               ? "destructive"
                               : bug.priority === "High"
                               ? "default"
-                              : "outline"
+                              : "outline-solid"
                           }
                           className="text-xs"
                         >

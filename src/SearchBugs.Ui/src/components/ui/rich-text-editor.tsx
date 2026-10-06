@@ -284,8 +284,8 @@ const RichTextEditor = React.forwardRef<
               <textarea
                 ref={textareaRef}
                 className={cn(
-                  "w-full min-h-[200px] p-3 bg-transparent text-sm resize-none outline-none placeholder:text-muted-foreground",
-                  "focus:ring-0 focus:outline-none"
+                  "w-full min-h-[200px] p-3 bg-transparent text-sm resize-none outline-hidden placeholder:text-muted-foreground",
+                  "focus:ring-0 focus:outline-hidden"
                 )}
                 value={value}
                 onChange={(e) => handleChange(e.target.value)}

@@ -29,7 +29,7 @@ export const ThemeTest = () => {
           {themes.map(({ id, label, icon: Icon }) => (
             <Button
               key={id}
-              variant={theme === id ? "default" : "outline"}
+              variant={theme === id ? "default" : "outline-solid"}
               size="sm"
               onClick={() => setTheme(id)}
               className="flex items-center gap-2"

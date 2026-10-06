@@ -50,7 +50,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-background to-muted">
+    <div className="absolute inset-0 flex items-center justify-center bg-linear-to-br from-background to-muted">
       <Card className="mx-auto max-w-sm w-full m-4 shadow-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Welcome Back</CardTitle>

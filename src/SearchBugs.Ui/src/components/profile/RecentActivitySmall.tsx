@@ -159,7 +159,7 @@ export const RecentActivitySmall: React.FC<RecentActivitySmallProps> = ({
                   className="flex items-start gap-2 group hover:bg-muted/50 -mx-2 px-2 py-1 rounded-md transition-colors"
                 >
                   <div
-                    className={`p-1 rounded-full flex-shrink-0 ${
+                    className={`p-1 rounded-full shrink-0 ${
                       activity.isSuccess
                         ? "bg-green-100 text-green-600"
                         : "bg-red-100 text-red-600"

@@ -604,7 +604,7 @@ export const AdvancedSettingsPanel: React.FC = () => {
                     <div className="space-y-2">
                       <Label>Type "DELETE MY ACCOUNT" to confirm:</Label>
                       <input
-                        className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20"
+                        className="w-full px-3 py-2 border border-input rounded-md focus:outline-hidden focus:ring-2 focus:ring-primary/20"
                         value={deleteConfirmation.confirmText}
                         onChange={(e) =>
                           setDeleteConfirmation({
@@ -620,7 +620,7 @@ export const AdvancedSettingsPanel: React.FC = () => {
                       <Label>Enter your password:</Label>
                       <input
                         type="password"
-                        className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20"
+                        className="w-full px-3 py-2 border border-input rounded-md focus:outline-hidden focus:ring-2 focus:ring-primary/20"
                         value={deleteConfirmation.password}
                         onChange={(e) =>
                           setDeleteConfirmation({

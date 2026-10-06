@@ -54,7 +54,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
   const isOverLimit = content.length > maxLength;
 
   return (
-    <Card className={`border-none shadow-sm ${className}`}>
+    <Card className={`border-none shadow-xs ${className}`}>
       <CardContent className="pt-6">
         <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
           <FormTextarea

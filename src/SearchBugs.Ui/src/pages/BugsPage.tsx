@@ -111,7 +111,7 @@ export const BugsPage = () => {
   if (isLoading) {
     return (
       <div className="container mx-auto py-6 space-y-6 max-w-7xl">
-        <div className="flex items-center justify-between bg-card p-4 rounded-lg shadow-sm">
+        <div className="flex items-center justify-between bg-card p-4 rounded-lg shadow-xs">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Bugs</h1>
             <p className="text-sm text-muted-foreground mt-1">
@@ -134,7 +134,7 @@ export const BugsPage = () => {
           </div>
         </div>
 
-        <Card className="border-none shadow-sm">
+        <Card className="border-none shadow-xs">
           <CardContent className="p-6">
             <ListLoadingSkeleton items={8} />
           </CardContent>
@@ -145,7 +145,7 @@ export const BugsPage = () => {
 
   return (
     <div className="container mx-auto py-6 space-y-6 max-w-7xl">
-      <div className="flex items-center justify-between bg-card p-4 rounded-lg shadow-sm">
+      <div className="flex items-center justify-between bg-card p-4 rounded-lg shadow-xs">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Bugs</h1>
           <p className="text-sm text-muted-foreground mt-1">
@@ -190,7 +190,7 @@ export const BugsPage = () => {
         </div>
       </div>
 
-      <Card className="border-none shadow-sm">
+      <Card className="border-none shadow-xs">
         <CardContent className="p-0">
           <div className="relative w-full overflow-auto">
             <Table>
@@ -240,7 +240,7 @@ export const BugsPage = () => {
                             ? "default"
                             : bug.status === "In Progress"
                             ? "secondary"
-                            : "outline"
+                            : "outline-solid"
                         }
                       >
                         {bug.status}
@@ -253,7 +253,7 @@ export const BugsPage = () => {
                             ? "destructive"
                             : bug.priority === "High"
                             ? "default"
-                            : "outline"
+                            : "outline-solid"
                         }
                       >
                         {bug.priority}
@@ -266,7 +266,7 @@ export const BugsPage = () => {
                             ? "destructive"
                             : bug.severity === "High"
                             ? "default"
-                            : "outline"
+                            : "outline-solid"
                         }
                       >
                         {bug.severity}

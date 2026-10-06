@@ -48,7 +48,7 @@ export const AdminRBACPage: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border-0 shadow-xs">
         <CardHeader className="border-b bg-gray-50 dark:bg-gray-900">
           <CardTitle className="text-xl">Access Control Management</CardTitle>
           <CardDescription>

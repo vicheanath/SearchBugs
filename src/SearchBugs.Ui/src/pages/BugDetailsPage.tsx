@@ -380,7 +380,7 @@ export const BugDetailsPage = () => {
 
   return (
     <div className="container mx-auto py-6 space-y-6 max-w-7xl">
-      <div className="flex items-center justify-between bg-card p-4 rounded-lg shadow-sm">
+      <div className="flex items-center justify-between bg-card p-4 rounded-lg shadow-xs">
         <div className="flex-1">
           {/* Editable Title */}
           {editingField === "title" ? (
@@ -471,7 +471,7 @@ export const BugDetailsPage = () => {
                       ? "default"
                       : bugData.status === "In Progress"
                       ? "secondary"
-                      : "outline"
+                      : "outline-solid"
                   }
                   className="group-hover:ring-1 group-hover:ring-muted-foreground/20 transition-all"
                 >
@@ -527,7 +527,7 @@ export const BugDetailsPage = () => {
                       ? "destructive"
                       : bugData.priority === "High"
                       ? "default"
-                      : "outline"
+                      : "outline-solid"
                   }
                   className="group-hover:ring-1 group-hover:ring-muted-foreground/20 transition-all"
                 >
@@ -583,7 +583,7 @@ export const BugDetailsPage = () => {
                       ? "destructive"
                       : bugData.severity === "High"
                       ? "default"
-                      : "outline"
+                      : "outline-solid"
                   }
                   className="group-hover:ring-1 group-hover:ring-muted-foreground/20 transition-all"
                 >
@@ -650,7 +650,7 @@ export const BugDetailsPage = () => {
         </TabsList>
 
         <TabsContent value="details" className="space-y-4">
-          <Card className="border-none shadow-sm">
+          <Card className="border-none shadow-xs">
             <CardHeader>
               <CardTitle className="text-lg">Description</CardTitle>
             </CardHeader>
@@ -704,7 +704,7 @@ export const BugDetailsPage = () => {
         </TabsContent>
 
         <TabsContent value="comments" className="space-y-4">
-          <Card className="border-none shadow-sm">
+          <Card className="border-none shadow-xs">
             <CardContent className="pt-6">
               <div className="space-y-6">
                 {comments?.value?.map((comment) => (
@@ -760,7 +760,7 @@ export const BugDetailsPage = () => {
         </TabsContent>
 
         <TabsContent value="attachments" className="space-y-4">
-          <Card className="border-none shadow-sm">
+          <Card className="border-none shadow-xs">
             <CardContent className="pt-6">
               <div className="space-y-4">
                 {attachments?.value?.map((attachment) => (
@@ -801,7 +801,7 @@ export const BugDetailsPage = () => {
         </TabsContent>
 
         <TabsContent value="time" className="space-y-4">
-          <Card className="border-none shadow-sm">
+          <Card className="border-none shadow-xs">
             <CardContent className="pt-6">
               <div className="space-y-4">
                 {timeEntries?.value?.map((entry) => (
@@ -871,7 +871,7 @@ export const BugDetailsPage = () => {
         </TabsContent>
 
         <TabsContent value="history" className="space-y-4">
-          <Card className="border-none shadow-sm">
+          <Card className="border-none shadow-xs">
             <CardContent className="pt-6">
               <div className="space-y-4">
                 {history?.value?.map((entry) => (
@@ -922,7 +922,7 @@ export const BugDetailsPage = () => {
         </TabsContent>
 
         <TabsContent value="custom-fields" className="space-y-4">
-          <Card className="border-none shadow-sm">
+          <Card className="border-none shadow-xs">
             <CardContent className="pt-6">
               <div className="space-y-4">
                 {customFields?.value?.map((field) => (
